@@ -9,7 +9,7 @@ package shopcenter.models;
  *
  * @author youssef
  */
-public class Product {
+public class Product implements Cloneable{
    private int id,qauntity;
    private String title,category;
    private  float price;
@@ -71,4 +71,10 @@ public class Product {
     public void setImage(byte[] image) {
         this.image = image;
     } 
+
+    @Override
+    public Product clone() throws CloneNotSupportedException {
+        return (Product) super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }
