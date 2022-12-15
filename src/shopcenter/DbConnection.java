@@ -66,9 +66,9 @@ public class DbConnection {
          try {
             if(connection==null)
                   connection= DriverManager.getConnection("jdbc:sqlite:"+DBname);
-            String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price number decimal (10 , 2) , image blob" +
+            String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price number decimal (10 , 2) , image blob," +
                     " amount_sold number  )";
-            String userTable ="create Table user (id int primary key , name Text , email Text , password text , ssm number , phone Text , usertype Text )";
+            String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssm number , phone Text , usertype Text )";
             Statement statement=connection.createStatement();
             statement.execute(productTable);
             statement.execute(userTable);
