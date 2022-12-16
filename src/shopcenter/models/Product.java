@@ -11,6 +11,10 @@ package shopcenter.models;
  */
 public class Product {
    private int id,qauntity;
+
+    public void setId(int id) {
+        this.id = id;
+    }
    private String title,category;
    private  float price;
    private byte[] image;
@@ -29,8 +33,6 @@ public class Product {
     public int getId() {
         return id;
     }
-
-   
 
     public int getQauntity() {
         return qauntity;
@@ -71,4 +73,9 @@ public class Product {
     public void setImage(byte[] image) {
         this.image = image;
     } 
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", qauntity=" + qauntity + ", title=" + title + ", category=" + category + ", price=" + price + ", image=" + image + '}';
+    }
 }
