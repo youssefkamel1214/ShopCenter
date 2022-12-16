@@ -11,9 +11,17 @@ package shopcenter;
  */
 import java.sql.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import shopcenter.models.Product;
+import shopcenter.models.User;
+import shopcenter.models.Sale;
+import shopcenter.models.Category;
+import shopcenter.models.Feedback;
+import shopcenter.models.Shopcard;
+
 public class DbConnection {
     private static DbConnection instance;
     private   String DBname="ShopDB.db";
@@ -46,7 +54,38 @@ public class DbConnection {
               return true;
         }
     }
-    public void insert_product(Product product){
+    
+
+    //order (product id, amount, )
+    private void createTables() {
+         try {
+            if(connection==null)
+                  connection= DriverManager.getConnection("jdbc:sqlite:"+DBname);
+            String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price number decimal (10 , 2) , image blob," +
+                    " amount_sold number  )";
+            // balance creditcard
+            String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn number , phone Text , usertype Text , creditcard Text, balance number )";
+            String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, productid ,userid,date Text,FOREIGN KEY (productid) REFERENCES product(id) ON DELETE CASCADE,FOREIGN KEY (userid) REFERENCES user(id))";
+            String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
+            String productFeedbackTable = "create Table productfeedback (id INTEGER primary key AUTOINCREMENT,productid,userid,feedback Text,rate number, FOREIGN KEY (productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id))";
+            String Shopcard = "create Table shopcard (id INTEGER primary key AUTOINCREMENT,productid,userid,count number, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id))";
+            Statement statement=connection.createStatement();
+            
+            statement.execute(productTable);
+            statement.execute(userTable);
+            statement.execute(salesTable);
+            statement.execute(categoryTable);
+            statement.execute(productFeedbackTable);
+            statement.execute(Shopcard);
+            
+            statement.close();
+        }catch (SQLException exe){
+             System.err.println(exe);
+        }
+    }
+    // products functions
+    //insert  GetbyId Getall getbyCategory  Delete
+    public void insertPoduct(Product product){
         try {
             String sql="insert into product ( title , category , quantity , price , image ) values(?,?,?,?,?)";
             PreparedStatement s=  connection.prepareStatement(sql);
@@ -61,22 +100,7 @@ public class DbConnection {
             System.err.println(ex);
         }
     }
-    
-    private void createTables() {
-         try {
-            if(connection==null)
-                  connection= DriverManager.getConnection("jdbc:sqlite:"+DBname);
-            String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price number decimal (10 , 2) , image blob," +
-                    " amount_sold number  )";
-            String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssm number , phone Text , usertype Text )";
-            Statement statement=connection.createStatement();
-            statement.execute(productTable);
-            statement.execute(userTable);
-            statement.close();
-        }catch (SQLException exe){
-             System.err.println(exe);
-        }
-    }
+        
     public Product getproductbyid(int id){
         Product p=new Product();
         try {
@@ -85,15 +109,650 @@ public class DbConnection {
              statement.setInt(1, id);
              ResultSet rs= statement.executeQuery();
              while (rs.next()) {
+                 p.setId(rs.getInt("id"));
                  p.setTitle(rs.getString("title"));
                  p.setCategory(rs.getString("category"));
                  p.setQauntity(rs.getInt("quantity"));
                  p.setImage(rs.getBytes("image"));
-                 
             }
           }
-        catch (Exception e) {
+        catch (Exception ex) {
+             System.err.println(ex);
         }
         return p;
     }
+    
+    public List<Product> getAllProducts(){
+        List<Product> products = new ArrayList<Product>();
+        try {
+             String sql="select * from product";
+             PreparedStatement statement=connection.prepareStatement(sql);
+             ResultSet rs= statement.executeQuery();
+             while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setTitle(rs.getString("title"));
+                product.setCategory(rs.getString("category"));
+                product.setQauntity(rs.getInt("quantity"));
+                product.setImage(rs.getBytes("image"));
+                products.add(product);
+            }
+          }
+        catch (Exception ex) {
+             System.err.println(ex);
+        }
+        return products;
+    }
+    public List<Product> getProductsbyCategory(String category){
+        List<Product> products = new ArrayList<Product>();
+        try {
+             
+             String sql="select * from product where category = ?";
+             PreparedStatement statement=connection.prepareStatement(sql);
+             statement.setString(1, category);
+             ResultSet rs= statement.executeQuery();
+             while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setTitle(rs.getString("title"));
+                product.setCategory(rs.getString("category"));
+                product.setQauntity(rs.getInt("quantity"));
+                product.setImage(rs.getBytes("image"));
+                products.add(product);
+            }
+          }
+        catch (Exception ex) {
+             System.err.println(ex);
+        }
+        return products;
+    }
+    
+    public void deleteProduct(int id){
+        try {
+            String sql="delete from product where id = ?";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            statement.execute();
+            statement.close();
+        }
+        catch (Exception ex) {
+             System.err.println(ex);
+        }
+    }
+    
+
+
+
+    //user finction 
+    // insert getbyID GetAllUsers  countEmail  countCredit   countPhone  Delete
+        public void insertUser(User user){
+                // String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn number , phone Text , usertype Text )";
+            try {
+                String sql="insert into user ( name , email , password , ssn , phone , usertype , creditcard , balance ) values(?,?,?,?,?,?,?,?)";
+                PreparedStatement s=  connection.prepareStatement(sql);
+                s.setString(1, user.getName());
+                s.setString(2, user.getEmail());
+                s.setString(3, user.getPassword());
+                s.setInt(4, user.getSsn());
+                s.setString(5, user.getPhone());
+                s.setString(6, user.getUserType());
+                s.setString(7, user.getCreditcard());
+                s.setInt(8, user.getBalance());
+                s.execute();
+                s.close();
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+        
+        public User getUserbyid(int id){
+            User user = new User();
+            try {
+                // String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssm number , phone Text , usertype Text )";
+                 String sql="select * from user where id = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     user.setId(rs.getInt("id"));
+                     user.setName(rs.getString("name"));
+                     user.setEmail(rs.getString("email"));
+                     user.setPassword(rs.getString("password"));
+                     user.setSsn(rs.getInt("ssn"));
+                     user.setPhone(rs.getString("phone"));
+                     user.setUserType(rs.getString("usertype"));
+                     user.setCreditcard(rs.getString("creditcard"));
+                     user.setBalance(rs.getInt("balance"));
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return user;
+        }
+
+        public List<User> getAllUsers(){
+            List<User> users = new ArrayList<User>();
+            try {
+                // String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssm number , phone Text , usertype Text )";
+                 String sql="select * from user";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     User user = new User();
+                     user.setId(rs.getInt("id"));
+                     user.setName(rs.getString("name"));
+                     user.setEmail(rs.getString("email"));
+                     user.setPassword(rs.getString("password"));
+                     user.setSsn(rs.getInt("ssn"));
+                     user.setPhone(rs.getString("phone"));
+                     user.setUserType(rs.getString("usertype"));
+                     user.setCreditcard(rs.getString("creditcard"));
+                     user.setBalance(rs.getInt("balance"));
+                     users.add(user);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return users;
+        }
+        public int getCountEmail(String email){
+            int count = 0;
+            try {
+                String sql="select count(*) as total from user where email = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, email);
+                ResultSet rs= statement.executeQuery();
+                while (rs.next()) {
+                    count = rs.getInt("total");
+                }
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return count;
+            
+        }
+        
+        public int getCountCredit(String credit){
+            int count = 0;
+            try {
+                String sql="select count(*) as total from user where creditcard = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, credit);
+                ResultSet rs= statement.executeQuery();
+                while (rs.next()) {
+                    count = rs.getInt("total");
+                }
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return count;
+            
+        }
+        
+        public int getCountphone(String phone){
+            int count = 0;
+            try {
+                String sql="select count(*) as total from user where phone = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, phone);
+                ResultSet rs= statement.executeQuery();
+                while (rs.next()) {
+                    count = rs.getInt("total");
+                }
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return count;
+            
+        }
+    
+        public void deleteUser(int id){
+            try {
+                String sql="delete from user where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }
+        
+        //Sales functions
+        //insert  getbyid  getbyUserid   getbyProductid  delete
+
+        public void insertSale(Sale sale){
+               //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+            try {
+                String sql="insert into sales ( Productid , userid , date ) values(?,?,?)";
+                PreparedStatement s =  connection.prepareStatement(sql);
+                s.setInt(1, sale.getProductid());
+                s.setInt(2, sale.getUserid());
+                s.setString(3, sale.getDate());
+                s.execute();
+                s.close();
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+        
+        public Sale getSalebyid(int id){
+            Sale sale = new Sale();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from sales where id = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return sale;
+        }
+        
+        public List<Sale> getAllSale(){
+            List<Sale> sales = new ArrayList<Sale>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from sales";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     sales.add(sale);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return sales;
+        }
+        
+        public List<Sale> getSalesbyUserid(int id){
+            List<Sale> sales = new ArrayList<Sale>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from sales where userid = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     sales.add(sale);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return sales;
+        }
+                
+        public List<Sale> getSalesbyProductid(int id){
+            List<Sale> sales = new ArrayList<Sale>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from sales where productid = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     sales.add(sale);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return sales;
+        }
+        
+        public void deleteSale(int id){
+            try {
+                String sql="delete from sales where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }
+        
+
+        
+        //category functions
+        // insert getById GetALl Delete
+        //String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
+
+        public void insertCategory(Category category){
+                //String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
+            try {
+                String sql="insert into category ( title , image ) values(?,?)";
+                PreparedStatement s =  connection.prepareStatement(sql);
+                s.setString(1, category.getTitle());
+                s.setBytes(2, category.getImage());
+                s.execute();
+                s.close();
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }     
+        public Category getCategorybyid(int id){
+            Category category = new Category();
+            try {
+                  //String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
+                 String sql="select * from category where id = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                    category.setId(rs.getInt("id"));
+                    category.setTitle(rs.getString("title"));
+                    category.setImage(rs.getBytes("image"));
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return category;
+        }
+        public List<Category> getAllCategory(){
+            List<Category> categories = new ArrayList<Category>();
+            try {
+                  //String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
+                 String sql="select * from category";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                    Category category = new Category();
+                    category.setId(rs.getInt("id"));
+                    category.setTitle(rs.getString("title"));
+                    category.setImage(rs.getBytes("image"));
+                    categories.add(category);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return categories;
+        }
+        public void deleteCategory(int id){
+            try {
+                String sql="delete from category where id = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }
+        
+        
+        //feedback functions
+        //"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
+        
+        //list
+        public void insertFeedback(Feedback feedback){
+               //"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
+            try {
+                String sql="insert into productfeedback ( Productid , userid , feedback, rate ) values(?,?,?,?)";
+                PreparedStatement s =  connection.prepareStatement(sql);
+                s.setInt(1, feedback.getProductid());
+                s.setInt(2, feedback.getUserid());
+                s.setString(3, feedback.getFeedback());
+                s.setInt(4, feedback.getRate());
+                s.execute();
+                s.close();
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }  
+        public Feedback getFeedbackbyid(int id){
+            Feedback feedback = new Feedback();
+            try {
+                 ///"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
+                 String sql="select * from productfeedback where id = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     feedback.setId(rs.getInt("id"));
+                     feedback.setProductid(rs.getInt("productid"));
+                     feedback.setUserid(rs.getInt("userid"));
+                     feedback.setFeedback(rs.getString("feedback"));
+                     feedback.setRate(rs.getInt("rate"));
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return feedback;
+        }      
+        public List<Feedback> getAllFeedbacks(){
+            List<Feedback> feedbacks = new ArrayList<Feedback>();
+            try {
+                 ///"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
+                 String sql="select * from productfeedback";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Feedback feedback = new Feedback();
+                     feedback.setId(rs.getInt("id"));
+                     feedback.setProductid(rs.getInt("productid"));
+                     feedback.setUserid(rs.getInt("userid"));
+                     feedback.setFeedback(rs.getString("feedback"));
+                     feedback.setRate(rs.getInt("rate"));
+                     feedbacks.add(feedback);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return feedbacks;
+        }
+        public List<Feedback> getFeedbacksbyUserid(int id){
+            List<Feedback> feedbacks = new ArrayList<Feedback>();
+            try {
+                 ///"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
+                 String sql="select * from productfeedback where userid = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Feedback feedback = new Feedback();
+                     feedback.setId(rs.getInt("id"));
+                     feedback.setProductid(rs.getInt("productid"));
+                     feedback.setUserid(rs.getInt("userid"));
+                     feedback.setFeedback(rs.getString("feedback"));
+                     feedback.setRate(rs.getInt("rate"));
+                     feedbacks.add(feedback);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return feedbacks;
+        }
+        public List<Feedback> getFeedbacksbyProductid(int id){
+            List<Feedback> feedbacks = new ArrayList<Feedback>();
+            try {
+                 ///"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
+                 String sql="select * from productfeedback where productid = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Feedback feedback = new Feedback();
+                     feedback.setId(rs.getInt("id"));
+                     feedback.setProductid(rs.getInt("productid"));
+                     feedback.setUserid(rs.getInt("userid"));
+                     feedback.setFeedback(rs.getString("feedback"));
+                     feedback.setRate(rs.getInt("rate"));
+                     feedbacks.add(feedback);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return feedbacks;
+        }
+        public void deleteFeedback(int id){
+            try {
+                String sql="delete from productfeedback where id = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }
+        
+        //shopcard functions
+        //insert  getbyid getAll  getbyUserId  getbyProductId Delete
+         public void insertShopcard(Shopcard shopcard){
+              
+            try {
+                String sql="insert into shopcard ( Productid , userid , count ) values(?,?,?)";
+                PreparedStatement s =  connection.prepareStatement(sql);
+                s.setInt(1, shopcard.getProductid());
+                s.setInt(2, shopcard.getUserid());
+                s.setInt(3, shopcard.getCount());
+                s.execute();
+                s.close();
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+        
+        public Shopcard getShopcardbyid(int id){
+            Shopcard shopcard = new Shopcard();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from shopcard where id = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     shopcard.setId(rs.getInt("id"));
+                     shopcard.setProductid(rs.getInt("productid"));
+                     shopcard.setUserid(rs.getInt("userid"));
+                     shopcard.setCount(rs.getInt("count"));
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return shopcard;
+        }
+        
+        public List<Shopcard> getAllShopcards(){
+            List<Shopcard> shopcards = new ArrayList<Shopcard>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from shopcard";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Shopcard shopcard = new Shopcard();
+                     shopcard.setId(rs.getInt("id"));
+                     shopcard.setProductid(rs.getInt("productid"));
+                     shopcard.setUserid(rs.getInt("userid"));
+                     shopcard.setCount(rs.getInt("count"));
+                     shopcards.add(shopcard);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return shopcards;
+        }
+        
+        public List<Shopcard> getShopcardsbyUserid(int id){
+            List<Shopcard> shopcards = new ArrayList<Shopcard>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from shopcard where userid = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Shopcard shopcard = new Shopcard();
+                     shopcard.setId(rs.getInt("id"));
+                     shopcard.setProductid(rs.getInt("productid"));
+                     shopcard.setUserid(rs.getInt("userid"));
+                     shopcard.setCount(rs.getInt("count"));
+                     shopcards.add(shopcard);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return shopcards;
+        }
+        
+        public List<Shopcard> getShopcardsbyProductid(int id){
+            List<Shopcard> shopcards = new ArrayList<Shopcard>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from shopcard where productid = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Shopcard shopcard = new Shopcard();
+                     shopcard.setId(rs.getInt("id"));
+                     shopcard.setProductid(rs.getInt("productid"));
+                     shopcard.setUserid(rs.getInt("userid"));
+                     shopcard.setCount(rs.getInt("count"));
+                     shopcards.add(shopcard);
+                }
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return shopcards;
+        }
+        
+        public void deleteShopcard(int id){
+            try {
+                String sql="delete from shopcard where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }
 }

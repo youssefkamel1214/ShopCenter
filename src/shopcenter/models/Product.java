@@ -11,6 +11,10 @@ package shopcenter.models;
  */
 public class Product implements Cloneable{
    private int id,qauntity;
+
+    public void setId(int id) {
+        this.id = id;
+    }
    private String title,category;
    private  float price;
    private byte[] image;
@@ -76,5 +80,10 @@ public class Product implements Cloneable{
     public Product clone() throws CloneNotSupportedException {
         return (Product) super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", qauntity=" + qauntity + ", title=" + title + ", category=" + category + ", price=" + price + ", image=" + image + '}';
+    }
 }
