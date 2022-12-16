@@ -9,6 +9,7 @@ package shopcenter;
  *
  * @author youssef
  */
+import controllers.ProductRegistry;
 import java.sql.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class DbConnection {
     private static DbConnection instance;
     private   String DBname="ShopDB.db";
     private Connection connection=null;
+    private ProductRegistry registry=new ProductRegistry();
     private DbConnection() {
              if(fisrttimecreation()){
                   createTables();
@@ -87,13 +89,14 @@ public class DbConnection {
     //insert  GetbyId Getall getbyCategory  Delete
     public void insertPoduct(Product product){
         try {
-            String sql="insert into product ( title , category , quantity , price , image ) values(?,?,?,?,?)";
+            String sql="insert into product ( title , category , quantity , price , image,amount_sold ) values(?,?,?,?,?,?)";
             PreparedStatement s=  connection.prepareStatement(sql);
             s.setString(1, product.getTitle());
             s.setString(2, product.getCategory());
             s.setInt(3, product.getQauntity());
             s.setDouble(4, product.getPrice());
             s.setBytes(5, product.getImage());
+            s.setInt(6, product.getAmountsold());
             s.execute();
             s.close();
         } catch (SQLException ex) {
@@ -109,11 +112,12 @@ public class DbConnection {
              statement.setInt(1, id);
              ResultSet rs= statement.executeQuery();
              while (rs.next()) {
+                 p=registry.getproduct(rs.getString("category"));
                  p.setId(rs.getInt("id"));
                  p.setTitle(rs.getString("title"));
-                 p.setCategory(rs.getString("category"));
                  p.setQauntity(rs.getInt("quantity"));
                  p.setImage(rs.getBytes("image"));
+                 p.setAmountsold(rs.getInt("amount_sold"));
             }
           }
         catch (Exception ex) {
@@ -129,12 +133,12 @@ public class DbConnection {
              PreparedStatement statement=connection.prepareStatement(sql);
              ResultSet rs= statement.executeQuery();
              while (rs.next()) {
-                Product product = new Product();
+                Product product = registry.getproduct(rs.getString("category"));
                 product.setId(rs.getInt("id"));
                 product.setTitle(rs.getString("title"));
-                product.setCategory(rs.getString("category"));
                 product.setQauntity(rs.getInt("quantity"));
                 product.setImage(rs.getBytes("image"));
+                product.setAmountsold(rs.getInt("amount_sold"));
                 products.add(product);
             }
           }
@@ -152,12 +156,12 @@ public class DbConnection {
              statement.setString(1, category);
              ResultSet rs= statement.executeQuery();
              while (rs.next()) {
-                Product product = new Product();
+                 Product product = registry.getproduct(rs.getString("category"));
                 product.setId(rs.getInt("id"));
                 product.setTitle(rs.getString("title"));
-                product.setCategory(rs.getString("category"));
                 product.setQauntity(rs.getInt("quantity"));
                 product.setImage(rs.getBytes("image"));
+                product.setAmountsold(rs.getInt("amount_sold"));
                 products.add(product);
             }
           }

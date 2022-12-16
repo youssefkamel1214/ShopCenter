@@ -18,16 +18,27 @@ public class Product implements Cloneable{
    private String title,category;
    private  float price;
    private byte[] image;
-
+   private int amountsold;
     public Product() {
     }
 
-    public Product(int qauntity, String title, String category, float price, byte[] image) {
+    public int getAmountsold() {
+        return amountsold;
+    }
+
+    public void setAmountsold(int amountsold) {
+        this.amountsold = amountsold;
+    }
+
+   
+
+    public Product(int qauntity, String title, String category, float price, byte[] image, int amountsold) {
         this.qauntity = qauntity;
         this.title = title;
         this.category = category;
         this.price = price;
         this.image = image;
+        this.amountsold = amountsold;
     }
 
     public int getId() {
@@ -81,9 +92,11 @@ public class Product implements Cloneable{
         return (Product) super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
-
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", qauntity=" + qauntity + ", title=" + title + ", category=" + category + ", price=" + price + ", image=" + image + '}';
+        return "Product{" + "id=" + id + ", qauntity=" + qauntity + ", title=" + title + ", category=" + category + ", price=" + price + ", image=" + image + ", amountsold=" + amountsold + '}';
     }
+
+
+    
 }

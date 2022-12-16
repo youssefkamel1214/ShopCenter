@@ -1,0 +1,19 @@
+<changelist name="Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM_[Default_Changelist]1" date="1671204233787" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM_[Default_Changelist]1/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 12/16/2022 5:21 PM [Default Changelist]" />
+  <binary>
+    <option name="BEFORE_PATH" value="build/classes/shopcenter/ShopCenter.class" />
+    <option name="AFTER_PATH" value="build/classes/shopcenter/ShopCenter.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM_[Default_Changelist]1/ShopCenter.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="build/classes/shopcenter/models/Product.class" />
+    <option name="AFTER_PATH" value="build/classes/shopcenter/models/Product.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM_[Default_Changelist]1/Product.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="build/classes/shopcenter/DbConnection.class" />
+    <option name="AFTER_PATH" value="build/classes/shopcenter/DbConnection.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM_[Default_Changelist]1/DbConnection.class" />
+  </binary>
+</changelist>
