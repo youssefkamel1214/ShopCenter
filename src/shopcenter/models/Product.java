@@ -19,7 +19,16 @@ public class Product implements Cloneable{
    private  float price;
    private byte[] image;
    private int amountsold;
+   private float Discount;
     public Product() {
+    }
+
+    public float getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(float Discount) {
+        this.Discount = Discount;
     }
 
     public int getAmountsold() {
@@ -32,13 +41,14 @@ public class Product implements Cloneable{
 
    
 
-    public Product(int qauntity, String title, String category, float price, byte[] image, int amountsold) {
+    public Product(int qauntity, String title, String category, float price, byte[] image, int amountsold,float discount) {
         this.qauntity = qauntity;
         this.title = title;
         this.category = category;
         this.price = price;
         this.image = image;
         this.amountsold = amountsold;
+        this.Discount = discount;
     }
 
     public int getId() {

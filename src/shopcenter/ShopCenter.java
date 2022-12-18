@@ -30,10 +30,10 @@ public class ShopCenter {
     public static void main(String[] args) {
 //        UiFactoryController uicon=new UiFactoryController();
 //        uicon.getui("Login").showui();
-        DbConnection conn=DbConnection.getInstance();
-        //Product(int qauntity, String title, String category, float price, byte[] image) {
-       
-
-    }
+        //DbConnection conn=DbConnection.getInstance();
+        UiFactoryController F = new UiFactoryController();
+        F.getui("Home").showui();
     
 }
+}
+

@@ -5,8 +5,10 @@
  */
 package controllers;
 
+import Ui.FeedbackForm;
 import Ui.Home;
 import Ui.Login;
+import Ui.ProductDescription;
 import Ui.Register;
 import Ui.Ui;
 
@@ -24,6 +26,16 @@ public class UiFactoryController {
                    return new Register();
                else if(type.equals("Login"))
                    return new Login();
+               else if(type.equals("Feedback"))
+                   return new FeedbackForm();
                return null;
          } 
+          public Ui getuiParametrized(String type,String ProductType)
+          {
+              if(type==null||type.isEmpty())
+                   return null;
+              if(type.equals("ProductDescription"))
+                   return new ProductDescription(ProductType);
+              return null;
+          }
 }

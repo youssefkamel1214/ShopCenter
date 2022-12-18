@@ -10,8 +10,10 @@ package shopcenter;
  * @author youssef
  */
 import controllers.ProductRegistry;
+import java.io.ByteArrayOutputStream;
 import java.sql.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,9 +30,11 @@ public class DbConnection {
     private   String DBname="ShopDB.db";
     private Connection connection=null;
     private ProductRegistry registry=new ProductRegistry();
+    
     private DbConnection() {
              if(fisrttimecreation()){
                   createTables();
+                  insertbasicDB();
              }
              if(connection==null)
                   try {
@@ -63,8 +67,8 @@ public class DbConnection {
          try {
             if(connection==null)
                   connection= DriverManager.getConnection("jdbc:sqlite:"+DBname);
-            String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price number decimal (10 , 2) , image blob," +
-                    " amount_sold number  )";
+            String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price decimal (10 , 2) , image blob," +
+                    " amount_sold number , Discount decimal (1 , 2) )";
             // balance creditcard
             String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn number , phone Text , usertype Text , creditcard Text, balance number )";
             String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, productid ,userid,date Text,FOREIGN KEY (productid) REFERENCES product(id) ON DELETE CASCADE,FOREIGN KEY (userid) REFERENCES user(id))";
@@ -85,11 +89,113 @@ public class DbConnection {
              System.err.println(exe);
         }
     }
+    private void insertbasicDB() {
+        
+            String[] Titles = {"Jackets","Pants","TShirts","Shoes"};
+            int[] Price = new int[]{200,300,400,500};
+            int[] Price1 = new int[]{150,300,300,350};
+            int[] Price2 = new int[]{200,250,150,300};
+            int[] Price3 = new int[]{200,300,300,250};
+            for(int i=1; i <= 4;i++)
+            { 
+                try {
+                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\images\\"+ i + ".png"));
+                ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
+                byte[] buff=new byte[1024];
+                for(int r;(r=fis.read(buff))!=-1;){
+                   boas.write(buff,0,r);
+                }
+             byte[] image = boas.toByteArray();
+             
+             Category C =  new Category(Titles[i-1],image);
+             insertCategory(C);
+             } catch (Exception e) {
+             System.err.println(e);
+                }
+            }
+            Titles = new String[]{"Casual","Formal","LeatherJacket","WinterCoat"};
+            for(int i=1; i <= 4;i++)
+            { 
+                try {
+                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Jackets\\"+ i + ".jpg"));
+                ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
+                byte[] buff=new byte[1024];
+                for(int r;(r=fis.read(buff))!=-1;){
+                   boas.write(buff,0,r);
+                }
+             byte[] image = boas.toByteArray();
+             
+             Product C =  new Product(12,Titles[i-1],"Jackets",Price[i-1],image,i+1*2,0);
+             insertPoduct(C);
+             } catch (Exception e) {
+             System.err.println(e);
+                }
+            }
+            
+            Titles = new String[]{"jeans","jogger","sweetpants","trousers"};
+            for(int i=1; i <= 4;i++)
+            { 
+                try {
+                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Pants\\"+ i + ".jpg"));
+                ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
+                byte[] buff=new byte[1024];
+                for(int r;(r=fis.read(buff))!=-1;){
+                   boas.write(buff,0,r);
+                }
+             byte[] image = boas.toByteArray();
+             
+             Product C =  new Product(12,Titles[i-1],"Pants",Price1[i-1],image,i+1*2,0);
+             insertPoduct(C);
+             } catch (Exception e) {
+             System.err.println(e);
+                }
+            }
+            
+           Titles = new String[]{"boots","casual","leather","snickers"};
+            for(int i=1; i <= 4;i++)
+            { 
+                try {
+                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Shoes\\"+ i + ".jpg"));
+                ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
+                byte[] buff=new byte[1024];
+                for(int r;(r=fis.read(buff))!=-1;){
+                   boas.write(buff,0,r);
+                }
+             byte[] image = boas.toByteArray();
+             
+             Product C =  new Product(12,Titles[i-1],"Shoes",Price3[i-1],image,i+1*2,0);
+             insertPoduct(C);
+             } catch (Exception e) {
+             System.err.println(e);
+                }
+            }
+            
+            Titles = new String[]{"Hoodied","Oversized","polo","round"};
+            for(int i=1; i <= 4;i++)
+            { 
+                try {
+                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Tshirts\\"+ i + ".jpg"));
+                ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
+                byte[] buff=new byte[1024];
+                for(int r;(r=fis.read(buff))!=-1;){
+                   boas.write(buff,0,r);
+                }
+             byte[] image = boas.toByteArray();
+             
+             Product C =  new Product(12,Titles[i-1],"TShirts",Price2[i-1],image,i+1*2,0);
+             insertPoduct(C);
+             } catch (Exception e) {
+             System.err.println(e);
+                }
+            }
+            
+    }
+    
     // products functions
     //insert  GetbyId Getall getbyCategory  Delete
     public void insertPoduct(Product product){
         try {
-            String sql="insert into product ( title , category , quantity , price , image,amount_sold ) values(?,?,?,?,?,?)";
+            String sql="insert into product ( title , category , quantity , price , image,amount_sold, Discount ) values(?,?,?,?,?,?,?)";
             PreparedStatement s=  connection.prepareStatement(sql);
             s.setString(1, product.getTitle());
             s.setString(2, product.getCategory());
@@ -97,13 +203,13 @@ public class DbConnection {
             s.setDouble(4, product.getPrice());
             s.setBytes(5, product.getImage());
             s.setInt(6, product.getAmountsold());
+            s.setDouble(7, product.getDiscount());
             s.execute();
             s.close();
         } catch (SQLException ex) {
             System.err.println(ex);
         }
-    }
-        
+    } 
     public Product getproductbyid(int id){
         Product p=new Product();
         try {
@@ -115,9 +221,11 @@ public class DbConnection {
                  p=registry.getproduct(rs.getString("category"));
                  p.setId(rs.getInt("id"));
                  p.setTitle(rs.getString("title"));
+                 p.setPrice(rs.getFloat("Price"));
                  p.setQauntity(rs.getInt("quantity"));
                  p.setImage(rs.getBytes("image"));
                  p.setAmountsold(rs.getInt("amount_sold"));
+                 p.setDiscount(rs.getFloat("Discount"));
             }
           }
         catch (Exception ex) {
@@ -125,7 +233,6 @@ public class DbConnection {
         }
         return p;
     }
-    
     public List<Product> getAllProducts(){
         List<Product> products = new ArrayList<Product>();
         try {
@@ -136,9 +243,11 @@ public class DbConnection {
                 Product product = registry.getproduct(rs.getString("category"));
                 product.setId(rs.getInt("id"));
                 product.setTitle(rs.getString("title"));
+                product.setPrice(rs.getFloat("Price"));
                 product.setQauntity(rs.getInt("quantity"));
                 product.setImage(rs.getBytes("image"));
                 product.setAmountsold(rs.getInt("amount_sold"));
+                product.setDiscount(rs.getFloat("Discount"));
                 products.add(product);
             }
           }
@@ -158,10 +267,12 @@ public class DbConnection {
              while (rs.next()) {
                  Product product = registry.getproduct(rs.getString("category"));
                 product.setId(rs.getInt("id"));
+                product.setPrice(rs.getFloat("Price"));
                 product.setTitle(rs.getString("title"));
                 product.setQauntity(rs.getInt("quantity"));
                 product.setImage(rs.getBytes("image"));
                 product.setAmountsold(rs.getInt("amount_sold"));
+                product.setDiscount(rs.getFloat("Discount"));
                 products.add(product);
             }
           }
@@ -169,8 +280,7 @@ public class DbConnection {
              System.err.println(ex);
         }
         return products;
-    }
-    
+    } 
     public void deleteProduct(int id){
         try {
             String sql="delete from product where id = ?";
@@ -328,9 +438,11 @@ public class DbConnection {
             }
         }
         
+        
+        
+        
         //Sales functions
         //insert  getbyid  getbyUserid   getbyProductid  delete
-
         public void insertSale(Sale sale){
                //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
             try {
@@ -453,7 +565,6 @@ public class DbConnection {
         //category functions
         // insert getById GetALl Delete
         //String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
-
         public void insertCategory(Category category){
                 //String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
             try {
@@ -522,7 +633,6 @@ public class DbConnection {
         
         //feedback functions
         //"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
-        
         //list
         public void insertFeedback(Feedback feedback){
                //"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
@@ -759,4 +869,6 @@ public class DbConnection {
                  System.err.println(ex);
             }
         }
+
+
 }
