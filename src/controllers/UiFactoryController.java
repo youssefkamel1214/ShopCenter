@@ -5,6 +5,11 @@
  */
 package controllers;
 
+import Ui.AddCategory;
+import Ui.Admin;
+import Ui.DeleteCategory;
+import Ui.DeleteUser;
+import Ui.EditCategory;
 import Ui.FeedbackForm;
 import Ui.Home;
 import Ui.Login;
@@ -25,6 +30,16 @@ public class UiFactoryController {
                    return new Register();
                else if(type.equals("Login"))
                    return new Login();
+               else if(type.equals("Admin"))
+                   return new Admin();
+               else if(type.equals("AddCategory"))
+                   return new AddCategory();
+                else if(type.equals("EditCategory"))
+                   return new EditCategory(); 
+                 else if(type.equals("DeleteUser"))
+                   return new DeleteUser(); 
+                else if(type.equals("DeleteCategory"))
+                   return new DeleteCategory();
                else if(type.equals("Payment"))
                    return new Payment();
                return null;
