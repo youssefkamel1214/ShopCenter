@@ -19,6 +19,7 @@ import Ui.Payment;
 import Ui.ProductDescription;
 import Ui.Register;
 import Ui.Ui;
+import Ui.UpdateUserInfo;
 
 /**
  *
@@ -42,18 +43,21 @@ public class UiFactoryController {
                    return new DeleteUser();
                 else if(type.equals("DeleteCategory"))
                    return new DeleteCategory();
-               else if(type.equals("Payment"))
-                   return new Payment();
+          
                else if(type.equals("Additem"))
                    return new Additem();
                else if(type.equals("Edititem"))
                    return new EditItem();
+                else if(type.equals("Userinfo"))
+                   return new UpdateUserInfo();
                return null;
           } 
           public Ui getuiParametrized(String type,int Userid)
           {
             if(type.equals("Home"))
                 return new Home(Userid);
+            else if(type.equals("Payment"))
+              return new Payment(Userid);
               return null;
           }
           public Ui getuiParametrized(String type,int Userid,int Productid)

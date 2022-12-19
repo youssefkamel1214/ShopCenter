@@ -239,7 +239,7 @@ ArrayList<Integer> V = new ArrayList<Integer>();
        else
        {
         UiFactoryController F = new UiFactoryController();
-        F.getui("Payment").showui();
+        F.getuiParametrized("Payment", Userid).showui();
         this.dispose();
        }
     }//GEN-LAST:event_jButton6ActionPerformed

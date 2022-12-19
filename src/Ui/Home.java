@@ -47,6 +47,7 @@ public class Home extends javax.swing.JFrame implements Ui{
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -71,6 +72,14 @@ public class Home extends javax.swing.JFrame implements Ui{
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1030, 440));
+
+        jButton1.setText("User Info");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 480, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -108,6 +117,12 @@ public class Home extends javax.swing.JFrame implements Ui{
             this.dispose();
         }
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+          UiFactoryController F = new UiFactoryController();
+          F.getui("Userinfo").showui();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public void showui() {
@@ -164,6 +179,7 @@ public class Home extends javax.swing.JFrame implements Ui{
      */
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
