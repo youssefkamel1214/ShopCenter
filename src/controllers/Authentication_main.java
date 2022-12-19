@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Ui;
+package controllers;
 
 import controllers.DbConnection;
 import controllers.UiFactoryController;
@@ -23,11 +23,16 @@ int id;
 
     @Override
     public void authenaticat_user(String Email, String password) {
-             DbConnection db=DbConnection.getInstance();
-             id = db.getbyEmail(Email);
-             jf.dispose();
+        if(Email.equals("admin")&&password.equals("admin")){
             UiFactoryController ui = new UiFactoryController();
-            ui.getuiParametrized("Home",id).showui();
+            ui.getui("Admin").showui();
+            return;
+        } 
+        DbConnection db=DbConnection.getInstance();
+        id = db.getbyEmail(Email);
+        jf.dispose();
+        UiFactoryController ui = new UiFactoryController();
+        ui.getuiParametrized("Home",id).showui();
         
     }
  

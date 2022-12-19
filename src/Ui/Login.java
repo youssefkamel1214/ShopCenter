@@ -5,6 +5,7 @@
  */
 package Ui;
 
+import controllers.Authentication_porxy;
 import controllers.DbConnection;
 import controllers.UiFactoryController;
 import javax.swing.JOptionPane;
