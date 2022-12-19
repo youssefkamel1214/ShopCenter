@@ -959,5 +959,49 @@ public class DbConnection {
        return 0;
     }
 
+    public boolean checkcategoryexsits(String categoryname) {
+        //            String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
+
+        try {
+            String sql="Select count(*) as cc from category where title = ?";
+            PreparedStatement statment = connection.prepareStatement(sql);
+            statment.setString(1, categoryname);
+            ResultSet rs= statment.executeQuery();
+             int c=0;
+            if (rs.next()) {
+               c=rs.getInt("cc");
+              
+            }
+            rs.close();
+            statment.close();
+            if(c>0)
+                return true;
+            else return false;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public void updateproduct(Product product) {
+        try {
+            String sql="update product set title = ? , category = ? , quantity = ?, price = ? , image = ?,amount_sold = ?, discount = ?  where id=?";
+            PreparedStatement s=  connection.prepareStatement(sql);
+            s.setString(1, product.getTitle());
+            s.setString(2, product.getCategory());
+            s.setInt(3, product.getQauntity());
+            s.setDouble(4, product.getPrice());
+            s.setBytes(5, product.getImage());
+            s.setInt(6, product.getAmountsold());
+            s.setDouble(7, product.getDiscount());
+            s.setInt(8, product.getId());
+            s.execute();
+            s.close();
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+    }
+
 
 }

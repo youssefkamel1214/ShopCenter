@@ -5,15 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d8809288-430e-4a4c-9653-f769d4737b1a" name="Default Changelist" comment="Login-signup-Admin">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM__Default_Changelist_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_16_2022_5_21_PM__Default_Changelist_1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ShopDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/ShopDB.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Ui/FeedbackForm.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Ui/FeedbackForm.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Ui/FeedbackForm.form" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Ui/FeedbackForm.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/built-jar.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/built-jar.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Ui/Home.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Ui/Home.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Ui/Login.form" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Ui/Login.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Ui/Payment$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Ui/ProductDescription.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Ui/ProductDescription.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/controllers/DbConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/controllers/DbConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/controllers/UiFactoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/controllers/UiFactoryController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/shopcenter/DbConnection.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/shopcenter/ShopCenter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/shopcenter/ShopCenter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ui/FeedbackForm.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ui/FeedbackForm.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ui/FeedbackForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ui/FeedbackForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/shopcenter/models/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/shopcenter/models/Category.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/shopcenter/models/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/shopcenter/models/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/lib/AbsoluteLayout.jar" beforeDir="false" afterPath="$PROJECT_DIR$/dist/lib/AbsoluteLayout.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/DbConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/DbConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/UiFactoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/UiFactoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shopcenter/ShopCenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shopcenter/ShopCenter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,13 +47,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Github/ShopCenter&quot;
-  }
-}</component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -79,6 +89,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Home and things" />

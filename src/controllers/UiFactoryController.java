@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import Ui.Additem;
+import Ui.EditItem;
 import Ui.FeedbackForm;
 import Ui.Home;
 import Ui.Login;
@@ -27,6 +29,10 @@ public class UiFactoryController {
                    return new Login();
                else if(type.equals("Payment"))
                    return new Payment();
+               else if(type.equals("Additem"))
+                   return new Additem();
+               else if(type.equals("Edititem"))
+                   return new EditItem();
                return null;
           } 
           public Ui getuiParametrized(String type,int Userid)
