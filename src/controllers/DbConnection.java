@@ -447,6 +447,44 @@ public class DbConnection {
             
         }
     
+        public void updateUserBalance(int id,int newbalance){
+            try {
+                String sql="update user set balance = ? where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setInt(1, newbalance);
+                statement.setInt(2, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+       }
+        
+        //(id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn text , phone Text , creditcard Text, balance number )
+        public void updateUserInfo(int id,User user){
+            try {
+                String sql="update user set name = ? , set email = ? , set password = ? , set ssn = ? , set phone = ? , set creditcard = ? , set balance = ? , where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setString(1, user.getName());
+                statement.setString(2, user.getEmail());
+                statement.setString(3, user.getPassword());
+                statement.setString(4, user.getSsn());
+                statement.setString(5, user.getPhone());
+                statement.setString(6, user.getCreditcard());
+                statement.setInt(7, user.getBalance());
+                statement.setInt(8, id);
+                
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+       }
+        
+        
+        
         public void deleteUser(int id){
             try {
                 String sql="delete from user where id = ?";
