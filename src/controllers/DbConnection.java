@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shopcenter;
+package controllers;
 
 /**
  *
@@ -70,7 +70,7 @@ public class DbConnection {
             String productTable ="create Table product (id INTEGER primary key AUTOINCREMENT , title Text , category Text , quantity number , price decimal (10 , 2) , image blob," +
                     " amount_sold number , Discount decimal (1 , 2) )";
             // balance creditcard
-            String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn number , phone Text , usertype Text , creditcard Text, balance number )";
+            String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn text , phone Text , creditcard Text, balance number )";
             String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, productid ,userid,date Text,FOREIGN KEY (productid) REFERENCES product(id) ON DELETE CASCADE,FOREIGN KEY (userid) REFERENCES user(id))";
             String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
             String productFeedbackTable = "create Table productfeedback (id INTEGER primary key AUTOINCREMENT,productid,userid,feedback Text,rate number, FOREIGN KEY (productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id))";
@@ -99,7 +99,7 @@ public class DbConnection {
             for(int i=1; i <= 4;i++)
             { 
                 try {
-                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\images\\"+ i + ".png"));
+                FileInputStream  fis=new FileInputStream(new File("products\\images\\"+ i + ".png"));
                 ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
                 byte[] buff=new byte[1024];
                 for(int r;(r=fis.read(buff))!=-1;){
@@ -117,7 +117,7 @@ public class DbConnection {
             for(int i=1; i <= 4;i++)
             { 
                 try {
-                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Jackets\\"+ i + ".jpg"));
+                FileInputStream  fis=new FileInputStream(new File("products\\Jackets\\"+ i + ".jpg"));
                 ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
                 byte[] buff=new byte[1024];
                 for(int r;(r=fis.read(buff))!=-1;){
@@ -136,7 +136,7 @@ public class DbConnection {
             for(int i=1; i <= 4;i++)
             { 
                 try {
-                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Pants\\"+ i + ".jpg"));
+                FileInputStream  fis=new FileInputStream(new File("products\\Pants\\"+ i + ".jpg"));
                 ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
                 byte[] buff=new byte[1024];
                 for(int r;(r=fis.read(buff))!=-1;){
@@ -155,7 +155,7 @@ public class DbConnection {
             for(int i=1; i <= 4;i++)
             { 
                 try {
-                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Shoes\\"+ i + ".jpg"));
+                FileInputStream  fis=new FileInputStream(new File("products\\Shoes\\"+ i + ".jpg"));
                 ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
                 byte[] buff=new byte[1024];
                 for(int r;(r=fis.read(buff))!=-1;){
@@ -174,7 +174,7 @@ public class DbConnection {
             for(int i=1; i <= 4;i++)
             { 
                 try {
-                FileInputStream  fis=new FileInputStream(new File("D:\\Year 4 projects\\Design pattern\\ShopCenter-main\\products\\Tshirts\\"+ i + ".jpg"));
+                FileInputStream  fis=new FileInputStream(new File("products\\Tshirts\\"+ i + ".jpg"));
                 ByteArrayOutputStream boas= new  ByteArrayOutputStream(); 
                 byte[] buff=new byte[1024];
                 for(int r;(r=fis.read(buff))!=-1;){
@@ -302,16 +302,15 @@ public class DbConnection {
         public void insertUser(User user){
                 // String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn number , phone Text , usertype Text )";
             try {
-                String sql="insert into user ( name , email , password , ssn , phone , usertype , creditcard , balance ) values(?,?,?,?,?,?,?,?)";
+                String sql="insert into user ( name , email , password , ssn , phone , creditcard , balance ) values(?,?,?,?,?,?,?)";
                 PreparedStatement s=  connection.prepareStatement(sql);
                 s.setString(1, user.getName());
                 s.setString(2, user.getEmail());
                 s.setString(3, user.getPassword());
-                s.setInt(4, user.getSsn());
+                s.setString(4, user.getSsn());
                 s.setString(5, user.getPhone());
-                s.setString(6, user.getUserType());
-                s.setString(7, user.getCreditcard());
-                s.setInt(8, user.getBalance());
+                s.setString(6, user.getCreditcard());
+                s.setInt(7, user.getBalance());
                 s.execute();
                 s.close();
             } catch (SQLException ex) {
@@ -322,7 +321,7 @@ public class DbConnection {
         public User getUserbyid(int id){
             User user = new User();
             try {
-                // String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssm number , phone Text , usertype Text )";
+                
                  String sql="select * from user where id = ?";
                  PreparedStatement statement=connection.prepareStatement(sql);
                  statement.setInt(1, id);
@@ -332,9 +331,8 @@ public class DbConnection {
                      user.setName(rs.getString("name"));
                      user.setEmail(rs.getString("email"));
                      user.setPassword(rs.getString("password"));
-                     user.setSsn(rs.getInt("ssn"));
+                     user.setSsn(rs.getString("ssn"));
                      user.setPhone(rs.getString("phone"));
-                     user.setUserType(rs.getString("usertype"));
                      user.setCreditcard(rs.getString("creditcard"));
                      user.setBalance(rs.getInt("balance"));
                 }
@@ -358,9 +356,8 @@ public class DbConnection {
                      user.setName(rs.getString("name"));
                      user.setEmail(rs.getString("email"));
                      user.setPassword(rs.getString("password"));
-                     user.setSsn(rs.getInt("ssn"));
+                     user.setSsn(rs.getString("ssn"));
                      user.setPhone(rs.getString("phone"));
-                     user.setUserType(rs.getString("usertype"));
                      user.setCreditcard(rs.getString("creditcard"));
                      user.setBalance(rs.getInt("balance"));
                      users.add(user);
@@ -869,6 +866,35 @@ public class DbConnection {
                  System.err.println(ex);
             }
         }
+
+    public User ValidateEmail(String Email, String password) {
+        try {
+            String sql="Select * from user where email = ? and password = ?";
+            PreparedStatement statment = connection.prepareStatement(sql);
+            statment.setString(1, Email);
+            statment.setString(2, password);
+            
+            ResultSet rs= statment.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setSsn(rs.getString("ssn"));
+                user.setPhone(rs.getString("phone"));
+                user.setCreditcard(rs.getString("creditcard"));
+                user.setBalance(rs.getInt("balance"));
+                return user;
+            }
+            else{
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
+    }
 
 
 }

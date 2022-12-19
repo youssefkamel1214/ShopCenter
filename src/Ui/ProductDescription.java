@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import shopcenter.DbConnection;
+import controllers.DbConnection;
 import shopcenter.models.Category;
 import shopcenter.models.Product;
 

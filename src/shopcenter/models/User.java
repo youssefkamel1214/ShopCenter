@@ -15,19 +15,17 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private int ssn;
+    private String ssn;
     private String phone;
-    private String userType;
     private String creditcard;
     private int balance;
 
-    public User(String name, String email, String password, int ssn, String phone, String userType,String creditcard,int balance) {
+    public User(String name, String email, String password, String ssn, String phone,String creditcard,int balance) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.ssn = ssn;
         this.phone = phone;
-        this.userType = userType;
         this.creditcard = creditcard;
         this.balance = balance;
     }
@@ -67,16 +65,12 @@ public class User {
         return password;
     }
 
-    public int getSsn() {
+    public String getSsn() {
         return ssn;
     }
 
     public String getPhone() {
         return phone;
-    }
-
-    public String getUserType() {
-        return userType;
     }
 
     public void setId(int id) {
@@ -95,7 +89,7 @@ public class User {
         this.password = password;
     }
 
-    public void setSsn(int ssn) {
+    public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 
@@ -103,13 +97,11 @@ public class User {
         this.phone = phone;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
+
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", ssn=" + ssn + ", phone=" + phone + ", userType=" + userType + ", creditcard=" + creditcard + ", balance=" + balance + '}';
+        return "User{" + "id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", ssn=" + ssn + ", phone=" + phone + ", creditcard=" + creditcard + ", balance=" + balance + '}';
     }
     
     
