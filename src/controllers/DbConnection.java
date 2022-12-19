@@ -919,9 +919,13 @@ public class DbConnection {
                 user.setPhone(rs.getString("phone"));
                 user.setCreditcard(rs.getString("creditcard"));
                 user.setBalance(rs.getInt("balance"));
+                statment.close();
+                rs.close();
                 return user;
             }
             else{
+                rs.close();
+                statment.close();
                 return null;
             }
         } catch (SQLException ex) {
@@ -931,15 +935,22 @@ public class DbConnection {
     }
     
         public int getbyEmail(String Email) {
+            int id;
         try {
             String sql="Select id from user where email = ?";
             PreparedStatement statment = connection.prepareStatement(sql);
             statment.setString(1, Email);
             ResultSet rs= statment.executeQuery();
+            
             if (rs.next()) {
-                return rs.getInt("id");
+                id=rs.getInt("id");
+                rs.close();
+                statment.close();
+                return id;
             }
             else{
+                rs.close();
+                statment.close();
                 return 0;
             }
         } catch (SQLException ex) {

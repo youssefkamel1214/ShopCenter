@@ -6,7 +6,7 @@ package Ui;
 
 import controllers.UiFactoryController;
 import javax.swing.JOptionPane;
-import shopcenter.DbConnection;
+import controllers.DbConnection;
 import shopcenter.models.Feedback;
 
 /**
