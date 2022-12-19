@@ -227,6 +227,8 @@ public class DbConnection {
                  p.setAmountsold(rs.getInt("amount_sold"));
                  p.setDiscount(rs.getFloat("Discount"));
             }
+              rs.close();
+                 statement.close();
           }
         catch (Exception ex) {
              System.err.println(ex);
@@ -250,6 +252,8 @@ public class DbConnection {
                  p.setAmountsold(rs.getInt("amount_sold"));
                  p.setDiscount(rs.getFloat("Discount"));
             }
+              rs.close();
+                 statement.close();
           }
         catch (Exception ex) {
              System.err.println(ex);
@@ -275,6 +279,8 @@ public class DbConnection {
                 product.setDiscount(rs.getFloat("Discount"));
                 products.add(product);
             }
+              rs.close();
+                 statement.close();
           }
         catch (Exception ex) {
              System.err.println(ex);
@@ -300,6 +306,8 @@ public class DbConnection {
                 product.setDiscount(rs.getFloat("Discount"));
                 products.add(product);
             }
+              rs.close();
+                 statement.close();
           }
         catch (Exception ex) {
              System.err.println(ex);
@@ -361,6 +369,8 @@ public class DbConnection {
                      user.setCreditcard(rs.getString("creditcard"));
                      user.setBalance(rs.getInt("balance"));
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -387,6 +397,8 @@ public class DbConnection {
                      user.setBalance(rs.getInt("balance"));
                      users.add(user);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -403,6 +415,8 @@ public class DbConnection {
                 while (rs.next()) {
                     count = rs.getInt("total");
                 }
+                 rs.close();
+                 statement.close();
             }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -421,6 +435,8 @@ public class DbConnection {
                 while (rs.next()) {
                     count = rs.getInt("total");
                 }
+                 rs.close();
+                 statement.close();
             }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -439,6 +455,8 @@ public class DbConnection {
                 while (rs.next()) {
                     count = rs.getInt("total");
                 }
+                 rs.close();
+                 statement.close();
             }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -494,6 +512,8 @@ public class DbConnection {
                      sale.setUserid(rs.getInt("userid"));
                      sale.setDate(rs.getString("date"));
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -516,6 +536,8 @@ public class DbConnection {
                      sale.setDate(rs.getString("date"));
                      sales.add(sale);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -539,6 +561,8 @@ public class DbConnection {
                      sale.setDate(rs.getString("date"));
                      sales.add(sale);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -562,6 +586,8 @@ public class DbConnection {
                      sale.setDate(rs.getString("date"));
                      sales.add(sale);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -613,6 +639,8 @@ public class DbConnection {
                     category.setTitle(rs.getString("title"));
                     category.setImage(rs.getBytes("image"));
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -633,6 +661,8 @@ public class DbConnection {
                     category.setImage(rs.getBytes("image"));
                     categories.add(category);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -686,6 +716,8 @@ public class DbConnection {
                      feedback.setFeedback(rs.getString("feedback"));
                      feedback.setRate(rs.getInt("rate"));
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -708,6 +740,8 @@ public class DbConnection {
                      feedback.setRate(rs.getInt("rate"));
                      feedbacks.add(feedback);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -731,6 +765,8 @@ public class DbConnection {
                      feedback.setRate(rs.getInt("rate"));
                      feedbacks.add(feedback);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -754,6 +790,8 @@ public class DbConnection {
                      feedback.setRate(rs.getInt("rate"));
                      feedbacks.add(feedback);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -801,6 +839,8 @@ public class DbConnection {
                     count = rs.getInt("C");
                     return count;
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -823,6 +863,8 @@ public class DbConnection {
                      shopcard.setCount(rs.getInt("count"));
                      shopcards.add(shopcard);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -846,6 +888,8 @@ public class DbConnection {
                      shopcard.setCount(rs.getInt("count"));
                      shopcards.add(shopcard);
                 }
+                  rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -869,6 +913,8 @@ public class DbConnection {
                      shopcard.setCount(rs.getInt("count"));
                      shopcards.add(shopcard);
                 }
+                 rs.close();
+                 statement.close();
               }
             catch (Exception ex) {
                  System.err.println(ex);
@@ -959,6 +1005,80 @@ public class DbConnection {
        return 0;
     }
 
+    public Category GetCategorybyName(String CategoryName) {
+       String sql="Select * from category where title = ?";
+
+       PreparedStatement statment;
+        try {
+            statment = connection.prepareStatement(sql);
+            statment.setString(1, CategoryName);
+            ResultSet rs= statment.executeQuery();
+             if (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt("id"));
+                category.setTitle(rs.getString("title"));
+                category.setImage(rs.getBytes("image"));
+
+                statment.close();
+                rs.close();
+                return category;
+            }
+             else{
+                 rs.close();
+                statment.close();
+                return null;
+             }
+
+
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
+    }
+
+    public void UpdateCategory(Category category, String oldtitle) {
+         String sql="Update category set title = ?,image = ? where id = ?";
+         String sql2="Update product set category = ? where category = ?";
+       try{
+
+         PreparedStatement statment;
+        statment = connection.prepareStatement(sql);
+            statment.setString(1, category.getTitle());
+            statment.setBytes(2, category.getImage());
+            statment.setInt(3, category.getId());
+            statment.execute();
+            statment.close();
+            statment = connection.prepareStatement(sql2);
+            statment.setString(1,category.getTitle());
+             statment.setString(2,oldtitle);
+             statment.execute();
+             statment.close();
+
+       }
+       catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+       }
+
+    }
+
+    public void deletebyCategory(String title) {
+        String sql="Delete from product where category = ?";
+
+          try{
+               PreparedStatement statment;
+        statment = connection.prepareStatement(sql);
+        statment.setString(1, title);
+        statment.execute();
+        statment.close();
+          }
+          catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+       }
+    }
+
     public boolean checkcategoryexsits(String categoryname) {
         //            String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
 
@@ -970,14 +1090,14 @@ public class DbConnection {
              int c=0;
             if (rs.next()) {
                c=rs.getInt("cc");
-              
+
             }
             rs.close();
             statment.close();
             if(c>0)
                 return true;
             else return false;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
