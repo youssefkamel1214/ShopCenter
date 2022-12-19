@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import controllers.DbConnection;
 import shopcenter.models.Category;
 import shopcenter.models.Product;
+import shopcenter.models.Shopcard;
 
 /**
  *
@@ -29,14 +30,32 @@ public class ProductDescription extends javax.swing.JFrame implements Ui{
 
     String type;
     DbConnection db;  
-    List<Product> products;   
-    public ProductDescription(String type) {
+    List<Product> products; 
+    int Userid;
+    public ProductDescription(String type, int Userid) {
        this.type = type;
+       this.Userid = Userid;
        db = DbConnection.getInstance();
        products = db.getProductsbyCategory(type); 
     }
    
-
+    private void showShoppingcart() {
+        List<Shopcard> L = db.getAllShopcards();
+        if(L == null)
+        {
+          return;   
+        }
+        else
+        {
+             for(Shopcard S : L)
+             {
+                 Product P = db.getproductbyid( S.getProductid());
+                 String T = P.getTitle();
+                 jComboBox1.addItem(T);
+             }
+            
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -142,7 +161,6 @@ ArrayList<Integer> V = new ArrayList<Integer>();
         // TODO add your handling code here:
         int idx = jTable1.getSelectedRow();
         String temp = jTextField1.getText();
-        
         if(idx != -1 && !temp.isEmpty())
         {
             jComboBox1.addItem(products.get(idx).getTitle());
@@ -151,47 +169,79 @@ ArrayList<Integer> V = new ArrayList<Integer>();
             {
                 int amount = products.get(idx).getQauntity();
                 JOptionPane.showMessageDialog(this, "There is only available: " + amount + " Items");
+                return;
             }
             else
-               V.add(temp1);      
+            {
+               V.add(temp1);    
+               Shopcard shopcard = new Shopcard(Userid,products.get(idx).getId(),temp1);
+               db.insertShopcard(shopcard);
+               JOptionPane.showMessageDialog(this, "Item added to Shopping cart");
+            }
+              
         }
         
         else {
             JOptionPane.showMessageDialog(this, "Please Select the item and enter a count");
+            return;
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         UiFactoryController F = new UiFactoryController();
-        F.getui("Feedback").showui();
-        this.dispose();
+        int idx = jTable1.getSelectedRow();
+        if(idx == -1)
+        {
+           JOptionPane.showMessageDialog(this, "Please Select a product");  
+        }
+        else
+        {
+        int productId = products.get(idx).getId();
+        F.getuiParametrized("Feedback",Userid,productId).showui();
+        this.dispose(); 
+        }
+       
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         UiFactoryController F = new UiFactoryController();
-        F.getui("Home").showui();
+        F.getuiParametrized("Home",Userid).showui();
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         int idx = jComboBox1.getSelectedIndex();
+        String S = jComboBox1.getItemAt(idx);
+        Product P = db.getproductbyTitle(S);
+        db.deleteShopcard(P.getId());
         jComboBox1.removeItemAt(idx);
         V.remove(idx);            
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+          db.deleteallShopcard();
           jComboBox1.removeAllItems();
           V.clear();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        //payment
-        //add in shoppingcart
+       int count = db.getShopcardbyid();
+        System.out.println();
+       if(count == -1 || count == 0)
+       {
+         JOptionPane.showMessageDialog(this, "Please Enter items in Shoppint cart");
+         return;
+       }
+       else
+       {
+        UiFactoryController F = new UiFactoryController();
+        F.getui("Payment").showui();
+        this.dispose();
+       }
     }//GEN-LAST:event_jButton6ActionPerformed
 
    
@@ -225,6 +275,8 @@ ArrayList<Integer> V = new ArrayList<Integer>();
         jTable1.getColumnModel().getColumn(1).setCellRenderer(R);
       
     }
+
+
     
     private class imagerender extends DefaultTableCellRenderer{
         @Override
@@ -243,6 +295,7 @@ ArrayList<Integer> V = new ArrayList<Integer>();
         initComponents();
         setVisible(true);
         showCategories();
+        showShoppingcart();
     }
 
 

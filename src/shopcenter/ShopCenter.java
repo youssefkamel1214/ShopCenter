@@ -33,7 +33,7 @@ public class ShopCenter {
         //DbConnection conn=DbConnection.getInstance();
         UiFactoryController F = new UiFactoryController();
         F.getui("Login").showui();
-    
+
 }
 }
 

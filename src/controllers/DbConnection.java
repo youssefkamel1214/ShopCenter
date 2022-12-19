@@ -233,6 +233,31 @@ public class DbConnection {
         }
         return p;
     }
+    public Product getproductbyTitle(String title){
+        Product p=new Product();
+        try {
+             String sql="select * from product where title = ?";
+             PreparedStatement statement=connection.prepareStatement(sql);
+             statement.setString(1, title);
+             ResultSet rs= statement.executeQuery();
+             while (rs.next()) {
+                 p=registry.getproduct(rs.getString("category"));
+                 p.setId(rs.getInt("id"));
+                 p.setTitle(rs.getString("title"));
+                 p.setPrice(rs.getFloat("Price"));
+                 p.setQauntity(rs.getInt("quantity"));
+                 p.setImage(rs.getBytes("image"));
+                 p.setAmountsold(rs.getInt("amount_sold"));
+                 p.setDiscount(rs.getFloat("Discount"));
+            }
+          }
+        catch (Exception ex) {
+             System.err.println(ex);
+        }
+        return p;
+    }
+    
+    
     public List<Product> getAllProducts(){
         List<Product> products = new ArrayList<Product>();
         try {
@@ -765,25 +790,22 @@ public class DbConnection {
             }
         }
         
-        public Shopcard getShopcardbyid(int id){
-            Shopcard shopcard = new Shopcard();
+        public int getShopcardbyid(){
+            int count;
             try {
                  //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
-                 String sql="select * from shopcard where id = ?";
+                 String sql="select count(*) as C from shopcard ";
                  PreparedStatement statement=connection.prepareStatement(sql);
-                 statement.setInt(1, id);
                  ResultSet rs= statement.executeQuery();
                  while (rs.next()) {
-                     shopcard.setId(rs.getInt("id"));
-                     shopcard.setProductid(rs.getInt("productid"));
-                     shopcard.setUserid(rs.getInt("userid"));
-                     shopcard.setCount(rs.getInt("count"));
+                    count = rs.getInt("C");
+                    return count;
                 }
               }
             catch (Exception ex) {
                  System.err.println(ex);
             }
-            return shopcard;
+            return -1;
         }
         
         public List<Shopcard> getAllShopcards(){
@@ -854,11 +876,23 @@ public class DbConnection {
             return shopcards;
         }
         
-        public void deleteShopcard(int id){
+        public void deleteShopcard(int Pid){
             try {
-                String sql="delete from shopcard where id = ?";
+                String sql="delete from shopcard where productid = ?";
                 PreparedStatement statement=connection.prepareStatement(sql);
-                statement.setInt(1, id);
+                statement.setInt(1, Pid);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }
+        
+        public void deleteallShopcard(){
+            try {
+                String sql="delete from shopcard";
+                PreparedStatement statement=connection.prepareStatement(sql);
                 statement.execute();
                 statement.close();
             }

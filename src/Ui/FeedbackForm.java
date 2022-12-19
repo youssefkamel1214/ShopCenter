@@ -6,6 +6,8 @@ package Ui;
 
 import controllers.UiFactoryController;
 import javax.swing.JOptionPane;
+import shopcenter.DbConnection;
+import shopcenter.models.Feedback;
 
 /**
  *
@@ -14,8 +16,13 @@ import javax.swing.JOptionPane;
 public class FeedbackForm extends javax.swing.JFrame implements Ui{
 
 
-    public FeedbackForm() {
-
+    int userid,productid;
+    DbConnection db;   
+    public FeedbackForm(int Uid, int Pid) 
+    {
+       db = DbConnection.getInstance();
+       userid = Uid;
+       productid = Pid;
     }
 
     @SuppressWarnings("unchecked")
@@ -91,19 +98,21 @@ public class FeedbackForm extends javax.swing.JFrame implements Ui{
         // TODO add your handling code here:
        String Feedback = jTextField1.getText();
        String Rating = jTextField2.getText();
+       int R = Integer.parseInt(Rating);
        if(Rating.isEmpty() || Feedback.isEmpty())
        {
             JOptionPane.showMessageDialog(this, "Please Enter Feedback and rating");
             return;
        }
-       else if(Integer.parseInt(Rating) > 5)
+       else if(R > 5)
        {
            JOptionPane.showMessageDialog(this, "Please Enter rate between 1 and 5");
            return;
        }
-      
+        Feedback feedback = new Feedback(userid,productid,R,Feedback);
+        db.insertFeedback(feedback);
         UiFactoryController F = new UiFactoryController();
-        F.getui("Home").showui();
+        F.getuiParametrized("Home",userid).showui();
         this.dispose();
        //add it to the feedback here
     }//GEN-LAST:event_jButton1ActionPerformed
