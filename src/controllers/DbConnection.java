@@ -895,6 +895,24 @@ public class DbConnection {
         }
        return null;
     }
+    
+        public int getbyEmail(String Email) {
+        try {
+            String sql="Select id from user where email = ?";
+            PreparedStatement statment = connection.prepareStatement(sql);
+            statment.setString(1, Email);
+            ResultSet rs= statment.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+            else{
+                return 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return 0;
+    }
 
 
 }

@@ -20,7 +20,9 @@ public class Register extends javax.swing.JFrame  implements Ui{
     /**
      * Creates new form Register
      */
+    DbConnection db;
     public Register() {
+       db = DbConnection.getInstance();
     }
     
     @Override
@@ -185,6 +187,13 @@ public class Register extends javax.swing.JFrame  implements Ui{
         "Please Enter a valid email");
             return false;
         }
+         if(db.getCountEmail(email)>=1){
+         
+          JOptionPane.showMessageDialog(this,
+        "This Email Address already exists");
+            return false;
+         }
+         
           if(phone.isEmpty()){
             JOptionPane.showMessageDialog(this,
         "Please Enter a valid Phone");
@@ -228,7 +237,7 @@ public class Register extends javax.swing.JFrame  implements Ui{
       
           
            User New_user= new User(name,email,pass,ssn,phone,null,0);
-              DbConnection db=DbConnection.getInstance();
+              
              db.insertUser(New_user);
               dispose();
              
