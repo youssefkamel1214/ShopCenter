@@ -31,8 +31,9 @@ public class Home extends javax.swing.JFrame implements Ui{
     /**
      * Creates new form Home
      */
-    public Home() {
-        
+    int userid;
+    public Home(int Uid) {
+        userid = Uid;
     }
 
     /**
@@ -84,26 +85,26 @@ public class Home extends javax.swing.JFrame implements Ui{
         else if (indx == 0)
         {
             UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","Jackets").showui();
+            F.getuiParametrized("ProductDescription","Jackets",userid).showui();
             this.dispose();
         }
         else if (indx == 1)
         {
             UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","Pants").showui();
+            F.getuiParametrized("ProductDescription","Pants",userid).showui();
             this.dispose();
         }
         else if (indx == 2)
         {
             UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","TShirts").showui();
+            F.getuiParametrized("ProductDescription","TShirts",userid).showui();
             this.dispose();
 
         }
         else if (indx == 3)
         {
             UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","Shoes").showui();
+            F.getuiParametrized("ProductDescription","Shoes",userid).showui();
             this.dispose();
         }
     }//GEN-LAST:event_jTable1MouseClicked

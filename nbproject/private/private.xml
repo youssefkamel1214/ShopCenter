@@ -5,9 +5,9 @@
         <group>
             <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/controllers/UiFactoryController.java</file>
             <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/Ui/ProductDescription.java</file>
-            <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/shopcenter/models/Product.java</file>
             <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/Ui/Home.java</file>
             <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/Ui/FeedbackForm.java</file>
+            <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/shopcenter/models/Feedback.java</file>
             <file>file:/D:/Year%204%20projects/Design%20pattern/ShopCenter-main/src/shopcenter/DbConnection.java</file>
         </group>
     </open-files>
