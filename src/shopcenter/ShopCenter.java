@@ -9,7 +9,6 @@ package shopcenter;
  *
  * @author youssef
  */
-import controllers.DbConnection;
 import controllers.UiFactoryController;
 import java.sql.*;
 import java.util.logging.Level;
@@ -29,8 +28,11 @@ public class ShopCenter {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        UiFactoryController uicon=new UiFactoryController();
-        uicon.getui("Login").showui();
+//        UiFactoryController uicon=new UiFactoryController();
+//        uicon.getui("Login").showui();
+        //DbConnection conn=DbConnection.getInstance();
+        UiFactoryController F = new UiFactoryController();
+        F.getui("Login").showui();
 
 }
 }

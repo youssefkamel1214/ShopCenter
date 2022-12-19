@@ -4,6 +4,20 @@
  */
 package Ui;
 
+import controllers.DbConnection;
+import java.awt.Component;
+import java.awt.Image;
+import java.util.List;
+import shopcenter.models.Product;
+import shopcenter.models.Shopcard;
+import shopcenter.models.User;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author youssef
@@ -13,8 +27,108 @@ public class Payment extends javax.swing.JFrame implements Ui{
     /**
      * Creates new form Payment
      */
+    DbConnection conn ;
+    int userId = 1;
+    float OrderPrice = 0;
+    List<Shopcard> shopcards ;
+    List<Product> products;
+    User currentUser ;
+    
+
+    
     public Payment() {
+        GetInfo();
+        ShowAll();
     }
+    public Payment(int userId) {
+        this.userId = userId;
+        GetInfo();
+        ShowAll();
+    }
+    
+    private void ShowAll(){
+        
+        List<User> users = conn.getAllUsers();
+        for(int i = 0 ; i < users.size();i++){
+            System.out.println(users.get(i).toString());
+        }
+        
+         
+        for(int i = 0 ; i < shopcards.size();i++){
+            System.out.println(shopcards.get(i).toString());
+        }
+        
+        for(int i = 0 ; i < products.size();i++){
+            System.out.println(products.get(i).toString());
+        }
+        
+        
+    }
+    
+    private void GetInfo(){
+        conn = DbConnection.getInstance();
+        shopcards = conn.getShopcardsbyUserid(userId);
+        currentUser = conn.getUserbyid(userId);
+        products = new ArrayList<Product>();
+        
+        for(int i = 0 ; i < shopcards.size();i++){
+            int productid = shopcards.get(i).getId();
+            products.add(conn.getproductbyid(productid));
+        }
+    }
+    
+    private void showCategories()
+    {
+      
+        DefaultTableModel D;
+        D = new DefaultTableModel()
+        {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+                        }  
+        };
+        D.addColumn("Title");
+        D.addColumn("Image");
+        D.addColumn("Price");
+        D.addColumn("Count");
+        D.addColumn("Total Price");
+        
+        for(int i = 0 ; i < products.size();i++){
+            int totalPrice = (int)(products.get(i).getPrice()) * shopcards.get(i).getCount();
+            OrderPrice += totalPrice;
+            
+             D.addRow(new Object[]{
+                products.get(i).getTitle(),   
+                products.get(i).getImage(),
+                products.get(i).getPrice(),
+                shopcards.get(i).getCount(),
+                totalPrice
+                
+            } );
+        }
+       jTextField1.setText((String.valueOf(OrderPrice)));
+       
+       jTable1.setModel(D);
+       jTable1.setRowHeight(100);
+       jTable1.getTableHeader().setReorderingAllowed(false); 
+       Payment.imagerender R = new Payment.imagerender();     
+       jTable1.getColumnModel().getColumn(1).setCellRenderer(R);
+    }
+    
+    private class imagerender extends DefaultTableCellRenderer{
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            byte[] image = (byte[]) value;
+            ImageIcon img = new ImageIcon(new ImageIcon(image).getImage().
+              getScaledInstance(200, 100, Image.SCALE_SMOOTH ));
+            JLabel L = new JLabel();
+            L.setIcon(img);
+            return L;
+        }
+    }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -25,39 +139,174 @@ public class Payment extends javax.swing.JFrame implements Ui{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("7obyyyyyyyyyy");
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jButton1.setText("Buy");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setText("jTextField1");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Total Price");
+
+        jButton2.setText("+");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("-");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(408, 408, 408)
-                .addComponent(jLabel1)
-                .addContainerGap(477, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 799, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(172, 172, 172)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2))
+                .addGap(107, 107, 107)
                 .addComponent(jLabel1)
-                .addContainerGap(287, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jButton1)
+                .addGap(57, 57, 57))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        //buy
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here: ++
+        int idx = jTable1.getSelectedRow();
+        
+        if(idx == -1)
+            return;
+        
+        int count = (int)jTable1.getModel().getValueAt(idx, 3);
+        jTable1.getModel().setValueAt(count+1, idx, 3);
+        
+        float Price = (float)jTable1.getModel().getValueAt(idx, 2);
+        
+        int totalPrice = (int)jTable1.getModel().getValueAt(idx, 4);
+        jTable1.getModel().setValueAt(totalPrice + (int)Price, idx, 4);
+        
+        // add to totalprice
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+                int idx = jTable1.getSelectedRow();
+        
+        if(idx == -1)
+            return;
+        
+        int count = (int)jTable1.getModel().getValueAt(idx, 3);
+        
+        if(count == 0)
+            return;
+        
+        jTable1.getModel().setValueAt(count-1, idx, 3);
+        
+        float Price = (float)jTable1.getModel().getValueAt(idx, 2);
+        int totalPrice = (int)jTable1.getModel().getValueAt(idx, 4);
+        jTable1.getModel().setValueAt(totalPrice - (int)Price, idx, 4);
+        
+        // add to totalprice
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        ConfirmPayment_proxy confirmPayment = new ConfirmPayment_proxy();
+        boolean confirm = confirmPayment.Confirm(currentUser, (int)OrderPrice);
+        
+        if(confirm){
+            //confirmed
+        }else{
+            //payment incorrect
+            // go to edit info  to add crditcard or increase balance
+        }
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
     @Override
     public void showui() {
         initComponents();
         setVisible(true);
+        showCategories();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
+//youssef@gmail.com
