@@ -15,6 +15,7 @@ import Ui.EditCategory;
 import Ui.FeedbackForm;
 import Ui.Home;
 import Ui.Login;
+import Ui.OrdersByDate;
 import Ui.Payment;
 import Ui.ProductDescription;
 import Ui.Register;
@@ -41,9 +42,12 @@ public class UiFactoryController {
                    return new EditCategory();
                  else if(type.equals("DeleteUser"))
                    return new DeleteUser();
+                   return new DeleteUser();
+                 else if (type.equals("OrdersByDate"))
+                     return new OrdersByDate();
                 else if(type.equals("DeleteCategory"))
                    return new DeleteCategory();
-          
+
                else if(type.equals("Additem"))
                    return new Additem();
                else if(type.equals("Edititem"))

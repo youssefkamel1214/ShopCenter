@@ -478,7 +478,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
        }
-        
+
         //(id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn text , phone Text , creditcard Text, balance number )
         public void updateUserInfo(int id,User user){
             try {
@@ -492,7 +492,7 @@ public class DbConnection {
                 statement.setString(6, user.getCreditcard());
                 statement.setInt(7, user.getBalance());
                 statement.setInt(8, id);
-                
+
                 statement.execute();
                 statement.close();
             }
@@ -500,9 +500,9 @@ public class DbConnection {
                  System.err.println(ex);
             }
        }
-        
-        
-        
+
+
+
         public void deleteUser(int id){
             try {
                 String sql="delete from user where id = ?";
@@ -626,7 +626,6 @@ public class DbConnection {
                      sale.setProductid(rs.getInt("productid"));
                      sale.setUserid(rs.getInt("userid"));
                      sale.setDate(rs.getString("date"));
-                     sale.setCount(rs.getInt("count"));
                      sales.add(sale);
                 }
                   rs.close();
@@ -1164,6 +1163,33 @@ public class DbConnection {
         } catch (SQLException ex) {
             System.err.println(ex);
         }
+    }
+
+    public ArrayList<Sale> SearchByDate(String date) {
+        ArrayList<Sale> Sales = new ArrayList<>();
+
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="Select * from sales where date= ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setString(1, date);
+
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     Sales.add(sale);
+                }
+                  rs.close();
+                 statement.close();
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return Sales;
     }
 
 
