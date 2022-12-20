@@ -26,6 +26,7 @@ int id;
         if(Email.equals("admin")&&password.equals("admin")){
             UiFactoryController ui = new UiFactoryController();
             ui.getui("Admin").showui();
+            jf.dispose();
             return;
         } 
         DbConnection db=DbConnection.getInstance();

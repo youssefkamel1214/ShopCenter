@@ -42,7 +42,6 @@ public class UiFactoryController {
                    return new EditCategory();
                  else if(type.equals("DeleteUser"))
                    return new DeleteUser();
-                   return new DeleteUser();
                  else if (type.equals("OrdersByDate"))
                      return new OrdersByDate();
                 else if(type.equals("DeleteCategory"))
