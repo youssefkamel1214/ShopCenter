@@ -1079,5 +1079,32 @@ public class DbConnection {
        }
     }
 
+    public ArrayList<Sale> SearchByDate(String date) {
+        ArrayList<Sale> Sales = new ArrayList<>();
+        
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="Select * from sales where date= ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setString(1, date);
+     
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     Sales.add(sale);
+                }
+                  rs.close();
+                 statement.close();
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return Sales;
+    }
+
 
 }
