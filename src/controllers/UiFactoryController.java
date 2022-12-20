@@ -48,8 +48,6 @@ public class UiFactoryController {
                    return new Additem();
                else if(type.equals("Edititem"))
                    return new EditItem();
-                else if(type.equals("Userinfo"))
-                   return new UpdateUserInfo();
                return null;
           } 
           public Ui getuiParametrized(String type,int Userid)
@@ -58,8 +56,11 @@ public class UiFactoryController {
                 return new Home(Userid);
             else if(type.equals("Payment"))
               return new Payment(Userid);
+            else if(type.equals("Userinfo"))
+                   return new UpdateUserInfo(Userid);
               return null;
           }
+          
           public Ui getuiParametrized(String type,int Userid,int Productid)
           {
                if(type.equals("Feedback"))

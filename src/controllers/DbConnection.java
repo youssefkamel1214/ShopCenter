@@ -482,7 +482,7 @@ public class DbConnection {
         //(id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn text , phone Text , creditcard Text, balance number )
         public void updateUserInfo(int id,User user){
             try {
-                String sql="update user set name = ? , set email = ? , set password = ? , set ssn = ? , set phone = ? , set creditcard = ? , set balance = ? , where id = ?";
+                String sql="update user set name = ? , email = ? , password = ? , ssn = ? , phone = ? , creditcard = ? ,balance = ? where id = ?";
                 PreparedStatement statement=connection.prepareStatement(sql);
                 statement.setString(1, user.getName());
                 statement.setString(2, user.getEmail());
