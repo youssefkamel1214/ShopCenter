@@ -216,7 +216,7 @@ ArrayList<Integer> V = new ArrayList<Integer>();
         int idx = jComboBox1.getSelectedIndex();
         String S = jComboBox1.getItemAt(idx);
         Product P = db.getproductbyTitle(S);
-        db.deleteShopcard(P.getId());
+        db.deleteShopcardById(P.getId());
         jComboBox1.removeItemAt(idx);
         V.remove(idx);            
     }//GEN-LAST:event_jButton5ActionPerformed

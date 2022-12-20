@@ -9,6 +9,8 @@ import controllers.DbConnection;
 import controllers.UiFactoryController;
 import java.awt.Component;
 import java.awt.Image;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import shopcenter.models.Product;
 import shopcenter.models.Shopcard;
@@ -33,39 +35,18 @@ public class Payment extends javax.swing.JFrame implements Ui{
      * Creates new form Payment
      */
     DbConnection conn ;
-    int userId = 1;
+    int userId;
     float OrderPrice = 0;
     List<Shopcard> shopcards ;
     List<Product> products;
     User currentUser ;
-    
 
-    
     
     public Payment(int userId) {
         this.userId = userId;
         GetInfo();
-        ShowAll();
     }
     
-    private void ShowAll(){
-        
-        List<User> users = conn.getAllUsers();
-        for(int i = 0 ; i < users.size();i++){
-            System.out.println(users.get(i).toString());
-        }
-        
-         
-        for(int i = 0 ; i < shopcards.size();i++){
-            System.out.println(shopcards.get(i).toString());
-        }
-        
-        for(int i = 0 ; i < products.size();i++){
-            System.out.println(products.get(i).toString());
-        }
-        
-        
-    }
     
     private void GetInfo(){
         conn = DbConnection.getInstance();
@@ -149,6 +130,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
         jButton3 = new javax.swing.JButton();
         totalprice = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -197,6 +179,13 @@ public class Payment extends javax.swing.JFrame implements Ui{
             }
         });
 
+        jButton5.setText("Delete");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -207,9 +196,6 @@ public class Payment extends javax.swing.JFrame implements Ui{
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 799, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(53, 53, 53)
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
@@ -219,7 +205,12 @@ public class Payment extends javax.swing.JFrame implements Ui{
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(63, 63, 63)
-                                .addComponent(totalprice))))
+                                .addComponent(totalprice))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton5)
+                                    .addComponent(jButton1)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(316, 316, 316)
                         .addComponent(jButton4)))
@@ -232,7 +223,9 @@ public class Payment extends javax.swing.JFrame implements Ui{
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton2))
-                .addGap(107, 107, 107)
+                .addGap(31, 31, 31)
+                .addComponent(jButton5)
+                .addGap(53, 53, 53)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(totalprice)
@@ -248,81 +241,122 @@ public class Payment extends javax.swing.JFrame implements Ui{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //Buy Button
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-           ConfirmPayment_proxy confirmPayment = new ConfirmPayment_proxy();
+        
+        //Check Proxy
+        ConfirmPayment_proxy confirmPayment = new ConfirmPayment_proxy();
         boolean confirm = confirmPayment.Confirm(currentUser, (int)OrderPrice);
         
         if(confirm){
             //confirmed
+            
+            //Delete table
             DefaultTableModel dm = (DefaultTableModel) jTable1.getModel();
             int count = dm.getRowCount();
             System.out.println(count);
             for(int i = 0; i < count; i++){
                 dm.removeRow(0);
             }
+            //Add to sale 
+            DateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");
+            String CurrentDate = dateFormat.format(Calendar.getInstance().getTime());
             Sale sale = new Sale();
-            sale.setDate(Calendar.getInstance().toString());
+            
+            sale.setDate(CurrentDate);
             for(int i = 0; i < shopcards.size(); i++){
                 sale.setProductid(shopcards.get(i).getProductid());
                 sale.setUserid(shopcards.get(i).getUserid());
                 sale.setCount(shopcards.get(i).getCount());   
                 conn.insertSale(sale);
             }
+            JOptionPane.showMessageDialog(this,"confirmed");
         }else{
-              JOptionPane.showMessageDialog(this,
-        "please check your credit card in user info");
+            //go to update info
+            JOptionPane.showMessageDialog(this,"please check your credit card in user info");
             UiFactoryController f=new UiFactoryController();
             f.getuiParametrized("Userinfo",userId).showui();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    // ++ Button
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here: ++
         int idx = jTable1.getSelectedRow();
+        int shopcardID = shopcards.get(idx).getId();
+        //count in table
+        int count = (int)jTable1.getModel().getValueAt(idx, 3);
+        int maxQuantity = products.get(idx).getQauntity();
         
         if(idx == -1)
             return;
         
-        int count = (int)jTable1.getModel().getValueAt(idx, 3);
+        if(count == maxQuantity)
+            return;
+        
+        //change in table ++
         jTable1.getModel().setValueAt(count+1, idx, 3);
-        
+        //change in DB ++
+        conn.updateShopcardCount(shopcardID, count + 1);
+        // item price
         float Price = (float)jTable1.getModel().getValueAt(idx, 2);
-        
+        // current totalprice
         int totalPrice = (int)jTable1.getModel().getValueAt(idx, 4);
+        // new totalprice in table
         jTable1.getModel().setValueAt(totalPrice + (int)Price, idx, 4);
-        
-        // add to totalprice
+        // new totalprice
+        totalprice.setText(String.valueOf(totalPrice + (int)Price));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-                int idx = jTable1.getSelectedRow();
+        int idx = jTable1.getSelectedRow();
+        int shopcardID = shopcards.get(idx).getId();
+        //count in table
+        int count = (int)jTable1.getModel().getValueAt(idx, 3);
         
         if(idx == -1)
             return;
-        
-        int count = (int)jTable1.getModel().getValueAt(idx, 3);
-        
+
         if(count == 0)
             return;
         
+        //change in table --
         jTable1.getModel().setValueAt(count-1, idx, 3);
-        
+        //change in DB --
+        conn.updateShopcardCount(shopcardID, count - 1);
+        // item price
         float Price = (float)jTable1.getModel().getValueAt(idx, 2);
+        // current totalprice
         int totalPrice = (int)jTable1.getModel().getValueAt(idx, 4);
+        // new totalprice in table
         jTable1.getModel().setValueAt(totalPrice - (int)Price, idx, 4);
-        
+        // new totalprice
+        totalprice.setText(String.valueOf(totalPrice + (int)Price));
         // add to totalprice
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    //Back to home button
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
          UiFactoryController F = new UiFactoryController();
          F.getuiParametrized("Home", userId).showui();
          dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+    // Delete Button
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // idx in table
+        int idx = jTable1.getSelectedRow();
+        int itemid = shopcards.get(idx).getId();
+        // delete in DB
+        conn.deleteShopcardById(itemid);
+        //Delete in list
+        shopcards.remove(idx);
+        
+        DefaultTableModel dm = (DefaultTableModel) jTable1.getModel();
+        //Delete in table
+        dm.removeRow(idx);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     @Override
     public void showui() {
@@ -336,6 +370,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
