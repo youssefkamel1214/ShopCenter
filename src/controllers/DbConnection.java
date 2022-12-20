@@ -278,6 +278,32 @@ public class DbConnection {
             System.err.println(ex);
         }
     }
+    public void updateproductqauntity(int id,int count){
+           try{
+               String sql="update product set quantity = quantity -? , amount_sold = amount_sold + ?  where id = ? ";
+               PreparedStatement s=  connection.prepareStatement(sql);
+               s.setInt(1, count);
+               s.setInt(2, count);
+               s.setInt(3, id);
+               s.execute();
+
+           }catch(Exception e){
+               System.err.println(e);
+           }
+    }
+    public void increaseproductstock(int id,int count){
+      try{
+          String sql="update product set quantity = quantity + ? ,amount_sold= amount_sold - ? where id = ? ";
+          PreparedStatement s=  connection.prepareStatement(sql);
+          s.setInt(1, count);
+          s.setInt(2, count);
+          s.setInt(3, id);
+          s.execute();
+      }catch(Exception e){
+            System.err.println(e);
+      }
+      
+    }
     public List<Product> getAllProducts(){
         List<Product> products = new ArrayList<Product>();
         try {
@@ -610,6 +636,32 @@ public class DbConnection {
                  String sql="select * from sales where userid = ?";
                  PreparedStatement statement=connection.prepareStatement(sql);
                  statement.setInt(1, id);
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     sale.setCount(rs.getInt("count"));
+                     sales.add(sale);
+                }
+                  rs.close();
+                 statement.close();
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return sales;
+        }    
+        
+         public List<Sale> getSalesbyDate(String date){
+            List<Sale> sales = new ArrayList<Sale>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="select * from sales where date = ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setString(1, date);
                  ResultSet rs= statement.executeQuery();
                  while (rs.next()) {
                      Sale sale = new Sale();

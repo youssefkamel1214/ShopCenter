@@ -4,6 +4,24 @@
  */
 package Ui;
 
+import controllers.DbConnection;
+import controllers.UiFactoryController;
+import java.awt.Component;
+import java.awt.Image;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import shopcenter.models.Category;
+import shopcenter.models.Product;
+import shopcenter.models.Sale;
+
 /**
  *
  * @author youssef
@@ -14,9 +32,11 @@ public class Order extends javax.swing.JFrame implements Ui{
      * Creates new form Order
      */
     int userid;
-
+    DbConnection db;
+    List<Sale> sale;
     public Order(int userid) {
         this.userid = userid;
+        db = DbConnection.getInstance() ;
     }
  
     /**
@@ -36,8 +56,18 @@ public class Order extends javax.swing.JFrame implements Ui{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Cancel Order");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -82,12 +112,80 @@ public class Order extends javax.swing.JFrame implements Ui{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        UiFactoryController F = new UiFactoryController();
+        F.getuiParametrized("home", userid);
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        for(Sale S : sale)
+        {
+           db.deleteSale(S.getId());
+           db.increaseproductstock(S.getProductid(),S.getCount());
+        }       
+        this.dispose();
+       
+    }//GEN-LAST:event_jButton1ActionPerformed
+  
+    private void ShowOrders()
+    {
+        
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        String CurrentDate = dateFormat.format(Calendar.getInstance().getTime());
+        List<Product> products = new ArrayList<Product>();
+        sale = db.getSalesbyDate(CurrentDate);
+        for(int i = 0; i < sale.size();i++)
+        {
+              Product p = db.getproductbyid(sale.get(i).getProductid());
+              products.add(p);
+        }
+        DefaultTableModel D;
+        D = new DefaultTableModel()
+        {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+                        }  
+        };
+        D.addColumn("Title");
+        D.addColumn("Image");
+        D.addColumn("count");
+        for(int i = 0; i < sale.size();i++)
+        {
+            
+            D.addRow(new Object[]{
+                products.get(i).getTitle(),
+                products.get(i).getImage(),
+                sale.get(i).getCount()
+            } );
+        }
+       jTable1.setModel(D);
+       jTable1.setRowHeight(100);
+       jTable1.getTableHeader().setReorderingAllowed(false); 
+        Order.imagerender R = new Order.imagerender();     
+        jTable1.getColumnModel().getColumn(1).setCellRenderer(R);
+      
+    }
+     private class imagerender extends DefaultTableCellRenderer{
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            byte[] image = (byte[]) value;
+            ImageIcon img = new ImageIcon(new ImageIcon(image).getImage().
+              getScaledInstance(200, 100, Image.SCALE_SMOOTH ));
+            JLabel L = new JLabel();
+            L.setIcon(img);
+            return L;
+        }
+    }
+
    
    
     @Override
     public void showui() {
         initComponents();
         setVisible(true);
+        ShowOrders();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

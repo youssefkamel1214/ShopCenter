@@ -264,6 +264,8 @@ public class Payment extends javax.swing.JFrame implements Ui{
             for(int i = 0; i < count; i++){
                 dm.removeRow(0);
             }
+           
+             
             //Add to sale 
             DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
             String CurrentDate = dateFormat.format(Calendar.getInstance().getTime());
@@ -275,6 +277,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
                 sale.setUserid(shopcards.get(i).getUserid());
                 sale.setCount(shopcards.get(i).getCount());   
                 conn.insertSale(sale);
+                conn.updateproductqauntity(shopcards.get(i).getProductid(),shopcards.get(i).getCount());
             }
             conn.deleteallShopcard();
             JOptionPane.showMessageDialog(this,"confirmed");

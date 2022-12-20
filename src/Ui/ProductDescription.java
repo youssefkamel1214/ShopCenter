@@ -245,7 +245,7 @@ ArrayList<Integer> V = new ArrayList<Integer>();
     }//GEN-LAST:event_jButton6ActionPerformed
 
    
-      private void showCategories()
+      private void showProducts()
     {
       
         DefaultTableModel D;
@@ -296,7 +296,7 @@ ArrayList<Integer> V = new ArrayList<Integer>();
      public void showui() {
         initComponents();
         setVisible(true);
-        showCategories();
+        showProducts();
         showShoppingcart();
     }
 
