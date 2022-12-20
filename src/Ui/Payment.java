@@ -270,6 +270,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
                 sale.setCount(shopcards.get(i).getCount());   
                 conn.insertSale(sale);
             }
+            conn.deleteallShopcard();
         }else{
               JOptionPane.showMessageDialog(this,
         "please check your credit card in user info");
@@ -294,6 +295,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
         jTable1.getModel().setValueAt(totalPrice + (int)Price, idx, 4);
         
         // add to totalprice
+      
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
