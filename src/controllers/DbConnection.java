@@ -259,9 +259,25 @@ public class DbConnection {
              System.err.println(ex);
         }
         return p;
+    } 
+    public void updateproduct(Product product) {
+        try {
+            String sql="update product set title = ? , category = ? , quantity = ?, price = ? , image = ?,amount_sold = ?, discount = ?  where id=?";
+            PreparedStatement s=  connection.prepareStatement(sql);
+            s.setString(1, product.getTitle());
+            s.setString(2, product.getCategory());
+            s.setInt(3, product.getQauntity());
+            s.setDouble(4, product.getPrice());
+            s.setBytes(5, product.getImage());
+            s.setInt(6, product.getAmountsold());
+            s.setDouble(7, product.getDiscount());
+            s.setInt(8, product.getId());
+            s.execute();
+            s.close();
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
     }
-    
-    
     public List<Product> getAllProducts(){
         List<Product> products = new ArrayList<Product>();
         try {
@@ -326,7 +342,21 @@ public class DbConnection {
              System.err.println(ex);
         }
     }
-    
+    public void deletebyCategory(String title) {
+        String sql="Delete from product where category = ?";
+
+          try{
+               PreparedStatement statment;
+        statment = connection.prepareStatement(sql);
+        statment.setString(1, title);
+        statment.execute();
+        statment.close();
+          }
+          catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+       }
+    }  
 
 
 
@@ -350,7 +380,6 @@ public class DbConnection {
                 System.err.println(ex);
             }
         }
-        
         public User getUserbyid(int id){
             User user = new User();
             try {
@@ -377,7 +406,6 @@ public class DbConnection {
             }
             return user;
         }
-
         public List<User> getAllUsers(){
             List<User> users = new ArrayList<User>();
             try {
@@ -423,8 +451,7 @@ public class DbConnection {
             }
             return count;
             
-        }
-        
+        }    
         public int getCountCredit(String credit){
             int count = 0;
             try {
@@ -443,8 +470,7 @@ public class DbConnection {
             }
             return count;
             
-        }
-        
+        }  
         public int getCountphone(String phone){
             int count = 0;
             try {
@@ -464,7 +490,6 @@ public class DbConnection {
             return count;
             
         }
-    
         public void updateUserBalance(int id,int newbalance){
             try {
                 String sql="update user set balance = ? where id = ?";
@@ -478,8 +503,6 @@ public class DbConnection {
                  System.err.println(ex);
             }
        }
-
-        //(id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn text , phone Text , creditcard Text, balance number )
         public void updateUserInfo(int id,User user){
             try {
                 String sql="update user set name = ? , email = ? , password = ? , ssn = ? , phone = ? , creditcard = ? ,balance = ? where id = ?";
@@ -500,9 +523,6 @@ public class DbConnection {
                  System.err.println(ex);
             }
        }
-
-
-
         public void deleteUser(int id){
             try {
                 String sql="delete from user where id = ?";
@@ -536,7 +556,6 @@ public class DbConnection {
                 System.err.println(ex);
             }
         }
-        
         public Sale getSalebyid(int id){
             Sale sale = new Sale();
             try {
@@ -560,7 +579,6 @@ public class DbConnection {
             }
             return sale;
         }
-        
         public List<Sale> getAllSale(){
             List<Sale> sales = new ArrayList<Sale>();
             try {
@@ -584,8 +602,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
             return sales;
-        }
-        
+        }     
         public List<Sale> getSalesbyUserid(int id){
             List<Sale> sales = new ArrayList<Sale>();
             try {
@@ -610,8 +627,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
             return sales;
-        }
-                
+        }              
         public List<Sale> getSalesbyProductid(int id){
             List<Sale> sales = new ArrayList<Sale>();
             try {
@@ -635,8 +651,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
             return sales;
-        }
-        
+        }     
         public void deleteSale(int id){
             try {
                 String sql="delete from sales where id = ?";
@@ -648,8 +663,32 @@ public class DbConnection {
             catch (Exception ex) {
                  System.err.println(ex);
             }
+        }      
+        public ArrayList<Sale> SearchByDate(String date) {
+            ArrayList<Sale> Sales = new ArrayList<>();
+            try {
+                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
+                 String sql="Select * from sales where date= ?";
+                 PreparedStatement statement=connection.prepareStatement(sql);
+                 statement.setString(1, date);
+
+                 ResultSet rs= statement.executeQuery();
+                 while (rs.next()) {
+                     Sale sale = new Sale();
+                     sale.setId(rs.getInt("id"));
+                     sale.setProductid(rs.getInt("productid"));
+                     sale.setUserid(rs.getInt("userid"));
+                     sale.setDate(rs.getString("date"));
+                     Sales.add(sale);
+                }
+                  rs.close();
+                 statement.close();
+              }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+            return Sales;
         }
-        
 
         
         //category functions
@@ -689,6 +728,60 @@ public class DbConnection {
             }
             return category;
         }
+        public Category GetCategorybyName(String CategoryName) {
+       String sql="Select * from category where title = ?";
+
+       PreparedStatement statment;
+        try {
+            statment = connection.prepareStatement(sql);
+            statment.setString(1, CategoryName);
+            ResultSet rs= statment.executeQuery();
+             if (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt("id"));
+                category.setTitle(rs.getString("title"));
+                category.setImage(rs.getBytes("image"));
+
+                statment.close();
+                rs.close();
+                return category;
+            }
+             else{
+                 rs.close();
+                statment.close();
+                return null;
+             }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
+    }
+        public void UpdateCategory(Category category, String oldtitle) {
+         String sql="Update category set title = ?,image = ? where id = ?";
+         String sql2="Update product set category = ? where category = ?";
+       try{
+
+         PreparedStatement statment;
+        statment = connection.prepareStatement(sql);
+            statment.setString(1, category.getTitle());
+            statment.setBytes(2, category.getImage());
+            statment.setInt(3, category.getId());
+            statment.execute();
+            statment.close();
+            statment = connection.prepareStatement(sql2);
+            statment.setString(1,category.getTitle());
+             statment.setString(2,oldtitle);
+             statment.execute();
+             statment.close();
+
+       }
+       catch (SQLException ex) {
+            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+       }
+
+    }
         public List<Category> getAllCategory(){
             List<Category> categories = new ArrayList<Category>();
             try {
@@ -710,7 +803,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
             return categories;
-        }
+        } 
         public void deleteCategory(int id){
             try {
                 String sql="delete from category where id = ?";
@@ -723,7 +816,28 @@ public class DbConnection {
                  System.err.println(ex);
             }
         }
-        
+         public boolean checkcategoryexsits(String categoryname) {
+            try {
+                String sql="Select count(*) as cc from category where title = ?";
+                PreparedStatement statment = connection.prepareStatement(sql);
+                statment.setString(1, categoryname);
+                ResultSet rs= statment.executeQuery();
+                 int c=0;
+                if (rs.next()) {
+                   c=rs.getInt("cc");
+
+                }
+                rs.close();
+                statment.close();
+                if(c>0)
+                    return true;
+                else return false;
+
+            } catch (SQLException ex) {
+                Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return false;
+         }
         
         //feedback functions
         //"create Table productfeedback (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),feedback Text,rate number)";
@@ -855,7 +969,7 @@ public class DbConnection {
         
         //shopcard functions
         //insert  getbyid getAll  getbyUserId  getbyProductId Delete
-         public void insertShopcard(Shopcard shopcard){
+        public void insertShopcard(Shopcard shopcard){
               
             try {
                 String sql="insert into shopcard ( Productid , userid , count ) values(?,?,?)";
@@ -869,7 +983,19 @@ public class DbConnection {
                 System.err.println(ex);
             }
         }
-        
+        public void updateShopcardCount(int id, int count){
+             try {
+                String sql="update shopcard set count = ? where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setInt(1,count);
+                statement.setInt(2, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }      
         public int getShopcardbyid(){
             int count;
             try {
@@ -889,7 +1015,6 @@ public class DbConnection {
             }
             return -1;
         }
-        
         public List<Shopcard> getAllShopcards(){
             List<Shopcard> shopcards = new ArrayList<Shopcard>();
             try {
@@ -912,8 +1037,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
             return shopcards;
-        }
-        
+        }   
         public List<Shopcard> getShopcardsbyUserid(int id){
             List<Shopcard> shopcards = new ArrayList<Shopcard>();
             try {
@@ -937,8 +1061,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
             return shopcards;
-        }
-        
+        }    
         public List<Shopcard> getShopcardsbyProductid(int id){
             List<Shopcard> shopcards = new ArrayList<Shopcard>();
             try {
@@ -963,8 +1086,7 @@ public class DbConnection {
             }
             return shopcards;
         }
-        
-        public void deleteShopcard(int Pid){
+        public void deleteShopcardByProductId(int Pid){
             try {
                 String sql="delete from shopcard where productid = ?";
                 PreparedStatement statement=connection.prepareStatement(sql);
@@ -975,8 +1097,19 @@ public class DbConnection {
             catch (Exception ex) {
                  System.err.println(ex);
             }
-        }
-        
+        }       
+        public void deleteShopcardById(int id){
+            try {
+                String sql="delete from shopcard where id = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }
+        }       
         public void deleteallShopcard(){
             try {
                 String sql="delete from shopcard";
@@ -988,8 +1121,7 @@ public class DbConnection {
                  System.err.println(ex);
             }
         }
-
-    public User ValidateEmail(String Email, String password) {
+        public User ValidateEmail(String Email, String password) {
         try {
             String sql="Select * from user where email = ? and password = ?";
             PreparedStatement statment = connection.prepareStatement(sql);
@@ -1020,8 +1152,7 @@ public class DbConnection {
             Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
        return null;
-    }
-    
+    }   
         public int getbyEmail(String Email) {
             int id;
         try {
@@ -1045,152 +1176,6 @@ public class DbConnection {
             Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
        return 0;
-    }
-
-    public Category GetCategorybyName(String CategoryName) {
-       String sql="Select * from category where title = ?";
-
-       PreparedStatement statment;
-        try {
-            statment = connection.prepareStatement(sql);
-            statment.setString(1, CategoryName);
-            ResultSet rs= statment.executeQuery();
-             if (rs.next()) {
-                Category category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setTitle(rs.getString("title"));
-                category.setImage(rs.getBytes("image"));
-
-                statment.close();
-                rs.close();
-                return category;
-            }
-             else{
-                 rs.close();
-                statment.close();
-                return null;
-             }
-
-
-
-        } catch (SQLException ex) {
-            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       return null;
-    }
-
-    public void UpdateCategory(Category category, String oldtitle) {
-         String sql="Update category set title = ?,image = ? where id = ?";
-         String sql2="Update product set category = ? where category = ?";
-       try{
-
-         PreparedStatement statment;
-        statment = connection.prepareStatement(sql);
-            statment.setString(1, category.getTitle());
-            statment.setBytes(2, category.getImage());
-            statment.setInt(3, category.getId());
-            statment.execute();
-            statment.close();
-            statment = connection.prepareStatement(sql2);
-            statment.setString(1,category.getTitle());
-             statment.setString(2,oldtitle);
-             statment.execute();
-             statment.close();
-
-       }
-       catch (SQLException ex) {
-            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
-
-       }
-
-    }
-
-    public void deletebyCategory(String title) {
-        String sql="Delete from product where category = ?";
-
-          try{
-               PreparedStatement statment;
-        statment = connection.prepareStatement(sql);
-        statment.setString(1, title);
-        statment.execute();
-        statment.close();
-          }
-          catch (SQLException ex) {
-            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
-
-       }
-    }
-
-    public boolean checkcategoryexsits(String categoryname) {
-        //            String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
-
-        try {
-            String sql="Select count(*) as cc from category where title = ?";
-            PreparedStatement statment = connection.prepareStatement(sql);
-            statment.setString(1, categoryname);
-            ResultSet rs= statment.executeQuery();
-             int c=0;
-            if (rs.next()) {
-               c=rs.getInt("cc");
-
-            }
-            rs.close();
-            statment.close();
-            if(c>0)
-                return true;
-            else return false;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
-
-    public void updateproduct(Product product) {
-        try {
-            String sql="update product set title = ? , category = ? , quantity = ?, price = ? , image = ?,amount_sold = ?, discount = ?  where id=?";
-            PreparedStatement s=  connection.prepareStatement(sql);
-            s.setString(1, product.getTitle());
-            s.setString(2, product.getCategory());
-            s.setInt(3, product.getQauntity());
-            s.setDouble(4, product.getPrice());
-            s.setBytes(5, product.getImage());
-            s.setInt(6, product.getAmountsold());
-            s.setDouble(7, product.getDiscount());
-            s.setInt(8, product.getId());
-            s.execute();
-            s.close();
-        } catch (SQLException ex) {
-            System.err.println(ex);
-        }
-    }
-
-    public ArrayList<Sale> SearchByDate(String date) {
-        ArrayList<Sale> Sales = new ArrayList<>();
-
-            try {
-                 //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
-                 String sql="Select * from sales where date= ?";
-                 PreparedStatement statement=connection.prepareStatement(sql);
-                 statement.setString(1, date);
-
-                 ResultSet rs= statement.executeQuery();
-                 while (rs.next()) {
-                     Sale sale = new Sale();
-                     sale.setId(rs.getInt("id"));
-                     sale.setProductid(rs.getInt("productid"));
-                     sale.setUserid(rs.getInt("userid"));
-                     sale.setDate(rs.getString("date"));
-                     Sales.add(sale);
-                }
-                  rs.close();
-                 statement.close();
-              }
-            catch (Exception ex) {
-                 System.err.println(ex);
-            }
-            return Sales;
-    }
-
+    } 
 
 }
