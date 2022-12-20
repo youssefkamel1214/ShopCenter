@@ -13,14 +13,24 @@ public class Sale {
     private int userid;
     private int productid;
     private String date;
+    private int count;
 
     public Sale() {
     }
 
-    public Sale(int userid, int productid, String date) {
+    public Sale(int userid, int productid, String date,int count) {
         this.userid = userid;
         this.productid = productid;
         this.date = date;
+        this.count = count;
+    }
+    
+     public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     public int getId() {

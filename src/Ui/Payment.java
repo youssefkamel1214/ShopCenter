@@ -14,12 +14,14 @@ import shopcenter.models.Product;
 import shopcenter.models.Shopcard;
 import shopcenter.models.User;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import shopcenter.models.Sale;
 
 /**
  *
@@ -254,6 +256,20 @@ public class Payment extends javax.swing.JFrame implements Ui{
         
         if(confirm){
             //confirmed
+            DefaultTableModel dm = (DefaultTableModel) jTable1.getModel();
+            int count = dm.getRowCount();
+            System.out.println(count);
+            for(int i = 0; i < count; i++){
+                dm.removeRow(0);
+            }
+            Sale sale = new Sale();
+            sale.setDate(Calendar.getInstance().toString());
+            for(int i = 0; i < shopcards.size(); i++){
+                sale.setProductid(shopcards.get(i).getProductid());
+                sale.setUserid(shopcards.get(i).getUserid());
+                sale.setCount(shopcards.get(i).getCount());   
+                conn.insertSale(sale);
+            }
         }else{
               JOptionPane.showMessageDialog(this,
         "please check your credit card in user info");

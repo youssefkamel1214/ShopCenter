@@ -71,7 +71,7 @@ public class DbConnection {
                     " amount_sold number , Discount decimal (1 , 2) )";
             // balance creditcard
             String userTable ="create Table user (id INTEGER primary key AUTOINCREMENT , name Text , email Text , password text , ssn text , phone Text , creditcard Text, balance number )";
-            String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, productid ,userid,date Text,FOREIGN KEY (productid) REFERENCES product(id) ON DELETE CASCADE,FOREIGN KEY (userid) REFERENCES user(id))";
+            String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, productid ,userid,date Text, count number,FOREIGN KEY (productid) REFERENCES product(id) ON DELETE CASCADE,FOREIGN KEY (userid) REFERENCES user(id))";
             String categoryTable = "create Table category (id INTEGER primary key AUTOINCREMENT , title Text , image blob)";
             String productFeedbackTable = "create Table productfeedback (id INTEGER primary key AUTOINCREMENT,productid,userid,feedback Text,rate number, FOREIGN KEY (productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id))";
             String Shopcard = "create Table shopcard (id INTEGER primary key AUTOINCREMENT,productid,userid,count number, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id))";
@@ -524,11 +524,12 @@ public class DbConnection {
         public void insertSale(Sale sale){
                //String salesTable = "create Table sales (id INTEGER primary key AUTOINCREMENT, FOREIGN KEY (Productid) REFERENCES product(id),FOREIGN KEY (userid) REFERENCES user(id),date Text)";
             try {
-                String sql="insert into sales ( Productid , userid , date ) values(?,?,?)";
+                String sql="insert into sales ( Productid , userid , date ,count ) values(?,?,?,?)";
                 PreparedStatement s =  connection.prepareStatement(sql);
                 s.setInt(1, sale.getProductid());
                 s.setInt(2, sale.getUserid());
                 s.setString(3, sale.getDate());
+                s.setInt(4, sale.getCount());
                 s.execute();
                 s.close();
             } catch (SQLException ex) {
@@ -549,6 +550,7 @@ public class DbConnection {
                      sale.setProductid(rs.getInt("productid"));
                      sale.setUserid(rs.getInt("userid"));
                      sale.setDate(rs.getString("date"));
+                     sale.setCount(rs.getInt("count"));
                 }
                   rs.close();
                  statement.close();
@@ -572,6 +574,7 @@ public class DbConnection {
                      sale.setProductid(rs.getInt("productid"));
                      sale.setUserid(rs.getInt("userid"));
                      sale.setDate(rs.getString("date"));
+                     sale.setCount(rs.getInt("count"));
                      sales.add(sale);
                 }
                   rs.close();
@@ -597,6 +600,7 @@ public class DbConnection {
                      sale.setProductid(rs.getInt("productid"));
                      sale.setUserid(rs.getInt("userid"));
                      sale.setDate(rs.getString("date"));
+                     sale.setCount(rs.getInt("count"));
                      sales.add(sale);
                 }
                   rs.close();
@@ -622,6 +626,7 @@ public class DbConnection {
                      sale.setProductid(rs.getInt("productid"));
                      sale.setUserid(rs.getInt("userid"));
                      sale.setDate(rs.getString("date"));
+                     sale.setCount(rs.getInt("count"));
                      sales.add(sale);
                 }
                   rs.close();
