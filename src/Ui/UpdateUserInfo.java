@@ -4,6 +4,10 @@
  */
 package Ui;
 
+import controllers.DbConnection;
+import javax.swing.JOptionPane;
+import shopcenter.models.User;
+
 /**
  *
  * @author youss
@@ -13,13 +17,21 @@ public class UpdateUserInfo extends javax.swing.JFrame implements Ui{
     /**
      * Creates new form UpdateUserInfo
      */
-    public UpdateUserInfo() {
+    int ID ;
+    User user;
+    DbConnection DB;
+
+    public UpdateUserInfo(int ID) {
+        this.ID = ID;
+        DB=DbConnection.getInstance();
+        user=DB.getUserbyid(ID);       
     }
     
     @Override
     public void showui() {
         initComponents();
         setVisible(true);
+        updateUi();
     }
 
     /**
@@ -31,26 +43,260 @@ public class UpdateUserInfo extends javax.swing.JFrame implements Ui{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Phone = new javax.swing.JTextField();
+        Password = new javax.swing.JPasswordField();
+        CreditFiled = new javax.swing.JPasswordField();
+        UpdateUser = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        NameLabel = new javax.swing.JLabel();
+        EmailLabel = new javax.swing.JLabel();
+        SsnLabel = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        RechargeFiled = new javax.swing.JTextField();
+        Recharge = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PasswordActionPerformed(evt);
+            }
+        });
+
+        CreditFiled.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CreditFiledActionPerformed(evt);
+            }
+        });
+
+        UpdateUser.setText("Update User info");
+        UpdateUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateUserActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Name");
+
+        jLabel2.setText("Email");
+
+        jLabel3.setText("Password");
+
+        jLabel4.setText("Credit Number ");
+
+        jLabel5.setText("Phone");
+
+        jLabel6.setText("SSN");
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel7.setText("              Update user info");
+        jLabel7.setAlignmentX(0.5F);
+        jLabel7.setAutoscrolls(true);
+
+        NameLabel.setText("jLabel8");
+
+        EmailLabel.setText("jLabel9");
+
+        SsnLabel.setText("jLabel10");
+
+        jLabel11.setText("Recharge Balance ");
+
+        Recharge.setText("Recharge");
+        Recharge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RechargeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3))
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Phone, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                                    .addComponent(Password)
+                                    .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(SsnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(28, 28, 28))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(EmailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(CreditFiled))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(RechargeFiled))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(110, 110, 110)
+                                .addComponent(UpdateUser, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(159, 159, 159)
+                                .addComponent(Recharge)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(28, 28, 28))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 533, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(NameLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(EmailLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(Phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SsnLabel)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(CreditFiled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(RechargeFiled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(26, 26, 26)
+                .addComponent(Recharge)
+                .addGap(18, 18, 18)
+                .addComponent(UpdateUser)
+                .addGap(31, 31, 31))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void PasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PasswordActionPerformed
+
+    private void CreditFiledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreditFiledActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CreditFiledActionPerformed
+
+    private void UpdateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateUserActionPerformed
+        String Phone= this.Phone.getText() ;
+        String Password= this.Password.getText() ;
+        String txtbalance= RechargeFiled.getText() ;
+        String credit= CreditFiled.getText() ;
+        
+        if (Phone.isEmpty()|| Password.isEmpty() ||credit.isEmpty()|| txtbalance.isEmpty() ){
+            JOptionPane.showMessageDialog(this,
+        "please Enter Your  Data");
+            return ;
+        }
+        user.setPhone(Phone);
+        user.setPassword(Password);
+        user.setBalance(Integer.parseInt(txtbalance));
+        user.setCreditcard(credit);
+        DB.updateUserInfo(ID, user);
+        updateUi();
+        dispose();
+     
+    }//GEN-LAST:event_UpdateUserActionPerformed
+
+    private void RechargeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RechargeActionPerformed
+        String txtbalance= RechargeFiled.getText() ;
+        String credit= CreditFiled.getText() ;
+        
+        if (credit.isEmpty()|| txtbalance.isEmpty() ){
+            JOptionPane.showMessageDialog(this,
+        "please Enter Credit card info and Balance");
+            return ;
+        }
+        
+        user.setCreditcard(credit);
+        if (user.getCreditcard()!=null){
+          user.setBalance(Integer.parseInt(txtbalance)+ user.getBalance());
+          DB.updateUserBalance(ID, user.getBalance());    
+        }
+        updateUi();
+    }//GEN-LAST:event_RechargeActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPasswordField CreditFiled;
+    private javax.swing.JLabel EmailLabel;
+    private javax.swing.JLabel NameLabel;
+    private javax.swing.JPasswordField Password;
+    private javax.swing.JTextField Phone;
+    private javax.swing.JButton Recharge;
+    private javax.swing.JTextField RechargeFiled;
+    private javax.swing.JLabel SsnLabel;
+    private javax.swing.JButton UpdateUser;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     // End of variables declaration//GEN-END:variables
+
+    private void updateUi() {
+       NameLabel.setText(user.getName());
+       EmailLabel.setText(user.getEmail());
+       Phone.setText(user.getPhone());
+       SsnLabel.setText(user.getSsn());
+       Password.setText(user.getPassword());
+       
+       if (user.getCreditcard()==null){
+           CreditFiled.setText("");
+       }else{
+           CreditFiled.setText(user.getCreditcard());
+       }
+       
+       RechargeFiled.setText(Integer.toString(user.getBalance()));
+       
+       
+    }
 }

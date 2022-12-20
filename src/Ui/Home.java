@@ -121,7 +121,7 @@ public class Home extends javax.swing.JFrame implements Ui{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
           UiFactoryController F = new UiFactoryController();
-          F.getui("Userinfo").showui();
+          F.getuiParametrized("Userinfo",userid).showui();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     @Override

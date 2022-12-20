@@ -274,7 +274,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
               JOptionPane.showMessageDialog(this,
         "please check your credit card in user info");
             UiFactoryController f=new UiFactoryController();
-            f.getui("Userinfo").showui();
+            f.getuiParametrized("Userinfo",userId).showui();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
