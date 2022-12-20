@@ -259,13 +259,15 @@ ArrayList<Integer> V = new ArrayList<Integer>();
         D.addColumn("Title");
         D.addColumn("Image");
         D.addColumn("Price");
+        D.addColumn("Price after discount");
         for(Product P : products)
         {
             
             D.addRow(new Object[]{
                 P.getTitle(),   
                 P.getImage(),
-                P.getPrice()
+                P.getPrice(),
+                P.getPrice()*(1-P.getDiscount())
             } );
         }
        jTable1.setModel(D);

@@ -32,8 +32,10 @@ public class Home extends javax.swing.JFrame implements Ui{
      * Creates new form Home
      */
     int userid;
+    DbConnection db;
     public Home(int Uid) {
         userid = Uid;
+        db=DbConnection.getInstance();
     }
 
     /**
@@ -48,6 +50,7 @@ public class Home extends javax.swing.JFrame implements Ui{
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -81,41 +84,32 @@ public class Home extends javax.swing.JFrame implements Ui{
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 480, -1, -1));
 
+        jButton2.setText("your Order");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 480, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int indx = jTable1.getSelectedRow();
+        List<Category> category = db.getAllCategory();
         if(indx == -1)
         {
            //tl3 message
         }
-        else if (indx == 0)
-        {
+        else
+        {           
             UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","Jackets",userid).showui();
+            F.getuiParametrized("ProductDescription",category.get(indx).getTitle(),userid).showui();
             this.dispose();
         }
-        else if (indx == 1)
-        {
-            UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","Pants",userid).showui();
-            this.dispose();
-        }
-        else if (indx == 2)
-        {
-            UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","TShirts",userid).showui();
-            this.dispose();
-
-        }
-        else if (indx == 3)
-        {
-            UiFactoryController F = new UiFactoryController();
-            F.getuiParametrized("ProductDescription","Shoes",userid).showui();
-            this.dispose();
-        }
+      
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -123,6 +117,12 @@ public class Home extends javax.swing.JFrame implements Ui{
           UiFactoryController F = new UiFactoryController();
           F.getuiParametrized("Userinfo",userid).showui();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+         UiFactoryController F = new UiFactoryController();
+         F.getuiParametrized("Order",userid).showui();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public void showui() {
@@ -133,7 +133,6 @@ public class Home extends javax.swing.JFrame implements Ui{
     
     private void showCategories()
     {
-        DbConnection db = DbConnection.getInstance();
         List<Category> category = db.getAllCategory();
         DefaultTableModel D;
         D = new DefaultTableModel()
@@ -180,6 +179,7 @@ public class Home extends javax.swing.JFrame implements Ui{
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

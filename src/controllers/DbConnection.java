@@ -663,7 +663,19 @@ public class DbConnection {
             catch (Exception ex) {
                  System.err.println(ex);
             }
-        }      
+        }  
+        public void deletebydate(String Date ){
+                        try {
+                String sql="delete from sales where date = ?";
+                PreparedStatement statement=connection.prepareStatement(sql);
+                statement.setString(1, Date);
+                statement.execute();
+                statement.close();
+            }
+            catch (Exception ex) {
+                 System.err.println(ex);
+            }      
+        }
         public ArrayList<Sale> SearchByDate(String date) {
             ArrayList<Sale> Sales = new ArrayList<>();
             try {

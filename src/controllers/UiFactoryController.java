@@ -15,6 +15,7 @@ import Ui.EditCategory;
 import Ui.FeedbackForm;
 import Ui.Home;
 import Ui.Login;
+import Ui.Order;
 import Ui.OrdersByDate;
 import Ui.Payment;
 import Ui.ProductDescription;
@@ -61,6 +62,8 @@ public class UiFactoryController {
               return new Payment(Userid);
             else if(type.equals("Userinfo"))
                    return new UpdateUserInfo(Userid);
+            else if(type.equals("Order"))
+                return new Order(Userid);
               return null;
           }
           

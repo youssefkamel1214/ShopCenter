@@ -39,11 +39,11 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
         jMenuItem2 = new javax.swing.JMenuItem();
         Searchbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        Date = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        Date = new javax.swing.JTextField();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -61,17 +61,10 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         jLabel1.setText("Admin-Orders By Date");
 
-        Date.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("M/d/y"))));
-        Date.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DateActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Search Orders By Date");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
-        jLabel3.setText("M/d/yy");
+        jLabel3.setText("MM-d-yy");
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -115,9 +108,9 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Date, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
+                        .addGap(28, 28, 28)
+                        .addComponent(Date, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
                         .addComponent(Searchbtn)
                         .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -132,11 +125,15 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Searchbtn)
-                    .addComponent(Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Searchbtn)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -144,16 +141,27 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DateActionPerformed
-
     private void SearchbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchbtnActionPerformed
         // TODO add your handling code here:
-         String date= Date.getText().toString();
+         
+        String date= Date.getText();
          System.out.println(date);
          int index = table.getSelectedRow();
          TableModel model=table.getModel();
+         // bfdy table mn values 2dema
+         if(Sales!=null)
+            for(int i=0;i<Sales.size();i++){
+
+
+
+                              model.setValueAt("", i, 0);
+                              model.setValueAt("", i, 1);
+                              model.setValueAt("", i, 2);
+                              model.setValueAt("", i, 3);
+
+
+
+                  }
          Sales = db.SearchByDate(date);
          
         if(!date.isEmpty() && !Sales.isEmpty()){
@@ -174,7 +182,7 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
 
         }
         else if(Sales.isEmpty()){
-        
+         
         JOptionPane.showMessageDialog(this,
         "There are no Orders with the Date : "+ date);
         }
@@ -201,7 +209,7 @@ public class OrdersByDate extends javax.swing.JFrame implements Ui {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFormattedTextField Date;
+    private javax.swing.JTextField Date;
     private javax.swing.JButton Searchbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -1,0 +1,36 @@
+@startuml
+annotation java.lang.Override
+class controllers.DbConnection
+class controllers.UiFactoryController
+class java.util.ArrayList
+class java.util.List
+class java.util.logging.Level
+class java.util.logging.Logger
+class shopcenter.ShopCenter
+class shopcenter.models.Category
+class shopcenter.models.Feedback
+class shopcenter.models.Product
+class shopcenter.models.Sale
+class shopcenter.models.Shopcard
+class shopcenter.models.User
+interface java.lang.Cloneable
+shopcenter.ShopCenter ..> controllers.DbConnection
+shopcenter.ShopCenter ..> controllers.UiFactoryController
+shopcenter.ShopCenter ..> java.util.ArrayList
+shopcenter.ShopCenter ..> java.util.List
+shopcenter.ShopCenter ..> java.util.logging.Level
+shopcenter.ShopCenter ..> java.util.logging.Logger
+shopcenter.ShopCenter ..> shopcenter.models.Category
+shopcenter.ShopCenter ..> shopcenter.models.Feedback
+shopcenter.ShopCenter ..> shopcenter.models.Product
+shopcenter.ShopCenter ..> shopcenter.models.Sale
+shopcenter.ShopCenter ..> shopcenter.models.Shopcard
+shopcenter.ShopCenter ..> shopcenter.models.User
+shopcenter.models.Category ..> java.lang.Override
+shopcenter.models.Feedback ..> java.lang.Override
+shopcenter.models.Product ..> java.lang.Override
+shopcenter.models.Product --|> java.lang.Cloneable
+shopcenter.models.Sale ..> java.lang.Override
+shopcenter.models.Shopcard ..> java.lang.Override
+shopcenter.models.User ..> java.lang.Override
+@enduml

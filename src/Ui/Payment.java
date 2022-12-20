@@ -55,7 +55,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
         products = new ArrayList<Product>();
         
         for(int i = 0 ; i < shopcards.size();i++){
-            int productid = shopcards.get(i).getId();
+            int productid = shopcards.get(i).getProductid();
             products.add(conn.getproductbyid(productid));
         }
     }
@@ -78,13 +78,14 @@ public class Payment extends javax.swing.JFrame implements Ui{
         D.addColumn("Total Price");
         
         for(int i = 0 ; i < products.size();i++){
-            int totalPrice = (int)(products.get(i).getPrice()) * shopcards.get(i).getCount();
+            float productprice=(products.get(i).getPrice()*(1-products.get(i).getDiscount()));
+            float totalPrice = productprice * shopcards.get(i).getCount();
             OrderPrice += totalPrice;
             
              D.addRow(new Object[]{
                 products.get(i).getTitle(),   
                 products.get(i).getImage(),
-                products.get(i).getPrice(),
+                products.get(i).getPrice()*(1-products.get(i).getDiscount()),
                 shopcards.get(i).getCount(),
                 totalPrice
                 
@@ -264,7 +265,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
                 dm.removeRow(0);
             }
             //Add to sale 
-            DateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");
+            DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
             String CurrentDate = dateFormat.format(Calendar.getInstance().getTime());
             Sale sale = new Sale();
             
@@ -277,6 +278,9 @@ public class Payment extends javax.swing.JFrame implements Ui{
             }
             conn.deleteallShopcard();
             JOptionPane.showMessageDialog(this,"confirmed");
+            UiFactoryController factoryController=new UiFactoryController();
+            factoryController.getuiParametrized("Home",userId).showui();
+            dispose();
         }else{
             //go to update info
             JOptionPane.showMessageDialog(this,"please check your credit card in user info");
@@ -306,11 +310,12 @@ public class Payment extends javax.swing.JFrame implements Ui{
         // item price
         float Price = (float)jTable1.getModel().getValueAt(idx, 2);
         // current totalprice
-        int totalPrice = (int)jTable1.getModel().getValueAt(idx, 4);
+        float totalPrice = (float)jTable1.getModel().getValueAt(idx, 4);
         // new totalprice in table
         jTable1.getModel().setValueAt(totalPrice + (int)Price, idx, 4);
         // new totalprice
-        totalprice.setText(String.valueOf(totalPrice + (int)Price));
+        OrderPrice+=Price;
+        totalprice.setText( String.format("%.02f", OrderPrice));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -333,11 +338,12 @@ public class Payment extends javax.swing.JFrame implements Ui{
         // item price
         float Price = (float)jTable1.getModel().getValueAt(idx, 2);
         // current totalprice
-        int totalPrice = (int)jTable1.getModel().getValueAt(idx, 4);
+        float totalPrice = (float)jTable1.getModel().getValueAt(idx, 4);
         // new totalprice in table
         jTable1.getModel().setValueAt(totalPrice - (int)Price, idx, 4);
         // new totalprice
-        totalprice.setText(String.valueOf(totalPrice + (int)Price));
+        OrderPrice-=Price;
+        totalprice.setText(String.format("%.02f", OrderPrice));
         // add to totalprice
     }//GEN-LAST:event_jButton3ActionPerformed
     //Back to home button
