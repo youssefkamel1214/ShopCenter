@@ -241,6 +241,7 @@ public class Payment extends javax.swing.JFrame implements Ui{
         
         //Check Proxy
         ConfirmPayment_proxy confirmPayment = new ConfirmPayment_proxy();
+        currentUser=conn.getUserbyid(userId);
         boolean confirm = confirmPayment.Confirm(currentUser, (int)OrderPrice);
         
         if(confirm){
