@@ -96,22 +96,11 @@ public class Payment extends javax.swing.JFrame implements Ui{
        jTable1.setModel(D);
        jTable1.setRowHeight(100);
        jTable1.getTableHeader().setReorderingAllowed(false); 
-       Payment.imagerender R = new Payment.imagerender();     
+       imagerender R = new imagerender();     
        jTable1.getColumnModel().getColumn(1).setCellRenderer(R);
     }
     
-    private class imagerender extends DefaultTableCellRenderer{
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            byte[] image = (byte[]) value;
-            ImageIcon img = new ImageIcon(new ImageIcon(image).getImage().
-              getScaledInstance(200, 100, Image.SCALE_SMOOTH ));
-            JLabel L = new JLabel();
-            L.setIcon(img);
-            return L;
-        }
-    }
-    
+  
 
 
     /**
